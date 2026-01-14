@@ -1,125 +1,36 @@
-<p align="center">
-  <a href="https://www.medusajs.com">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/59018053/229103275-b5e482bb-4601-46e6-8142-244f531cebdb.svg">
-    <source media="(prefers-color-scheme: light)" srcset="https://user-images.githubusercontent.com/59018053/229103726-e5b529a3-9b3f-4970-8a1f-c6af37f087bf.svg">
-    <img alt="Medusa logo" src="https://user-images.githubusercontent.com/59018053/229103726-e5b529a3-9b3f-4970-8a1f-c6af37f087bf.svg">
-    </picture>
-  </a>
-</p>
+# Medusa Next.js Starter Template
 
-<h1 align="center">
-  Medusa Next.js Starter Template
-</h1>
+This storefront combines Medusa's powerful commerce backend with a performant Next.js frontend. This document provides a walkthrough of how the storefront handles data and connects to the Medusa backend.
 
-<p align="center">
-Combine Medusa's modules for your commerce backend with the newest Next.js 15 features for a performant storefront.</p>
+## Data Flow and Backend Connection
 
-<p align="center">
-  <a href="https://github.com/medusajs/medusa/blob/master/CONTRIBUTING.md">
-    <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat" alt="PRs welcome!" />
-  </a>
-  <a href="https://discord.gg/xpCwq3Kfn8">
-    <img src="https://img.shields.io/badge/chat-on%20discord-7289DA.svg" alt="Discord Chat" />
-  </a>
-  <a href="https://twitter.com/intent/follow?screen_name=medusajs">
-    <img src="https://img.shields.io/twitter/follow/medusajs.svg?label=Follow%20@medusajs" alt="Follow @medusajs" />
-  </a>
-</p>
+The storefront communicates with the Medusa backend through a REST API. The base URL for the API is defined in the `MEDUSA_BACKEND_URL` environment variable. The storefront uses the Medusa JS client to interact with the API, simplifying data fetching, cart management, and checkout.
 
-### Prerequisites
+### Key Concepts
 
-To use the [Next.js Starter Template](https://medusajs.com/nextjs-commerce/), you should have a Medusa server running locally on port 9000.
-For a quick setup, run:
+- **Regions**: Medusa supports multiple regions, each with its own currency, tax rates, and shipping options. The storefront uses middleware to determine the user's region based on their IP address or URL and sets a cookie to persist the region. The default region can be configured in the middleware.
+- **Products**: Products are fetched from the Medusa backend and displayed on the product listing and detail pages. The storefront uses Next.js's data fetching capabilities to retrieve product data, which is then cached for performance.
+- **Collections**: Products can be organized into collections, which are also fetched from the backend and displayed on a dedicated collections page.
+- **Cart**: The storefront uses the Medusa JS client to manage the user's cart. The cart is stored in the Medusa backend and is associated with the user's session.
+- **Checkout**: The checkout process is handled by the Medusa backend. The storefront guides the user through the checkout flow, collecting shipping and payment information, and then submits the order to the backend for processing.
+- **User Accounts**: The storefront provides user account functionality, allowing users to create accounts, view their order history, and manage their profile.
 
-```shell
-npx create-medusa-app@latest
-```
+### Middleware
 
-Check out [create-medusa-app docs](https://docs.medusajs.com/learn/installation) for more details and troubleshooting.
+The `src/middleware.ts` file is responsible for the following:
 
-# Overview
+- **Region Detection**: It determines the user's region based on their IP address (using the `x-vercel-ip-country` header) or the URL (`/us`, `/de`, etc.).
+- **Cookie Management**: It sets a cookie to store the user's selected region, ensuring a consistent experience across sessions.
+- **URL Rewriting**: It rewrites the URL to include the region, making the storefront's pages statically optimized for each region.
 
-The Medusa Next.js Starter is built with:
+### Data Fetching
 
-- [Next.js](https://nextjs.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Typescript](https://www.typescriptlang.org/)
-- [Medusa](https://medusajs.com/)
+The storefront uses a combination of server-side and client-side data fetching:
 
-Features include:
+- **Server-Side Rendering (SSR)**: Pages that require fresh data on every request, such as the cart and checkout pages, are server-side rendered.
+- **Static Site Generation (SSG)**: Pages that can be pre-built, such as product and collection pages, are statically generated at build time.
+- **Client-Side Fetching**: The storefront uses client-side fetching to update data dynamically, such as when a user adds a product to their cart.
 
-- Full ecommerce support:
-  - Product Detail Page
-  - Product Overview Page
-  - Product Collections
-  - Cart
-  - Checkout with Stripe
-  - User Accounts
-  - Order Details
-- Full Next.js 15 support:
-  - App Router
-  - Next fetching/caching
-  - Server Components
-  - Server Actions
-  - Streaming
-  - Static Pre-Rendering
+### Backend Connection
 
-# Quickstart
-
-### Setting up the environment variables
-
-Navigate into your projects directory and get your environment variables ready:
-
-```shell
-cd nextjs-starter-medusa/
-mv .env.template .env.local
-```
-
-### Install dependencies
-
-Use Yarn to install all dependencies.
-
-```shell
-yarn
-```
-
-### Start developing
-
-You are now ready to start up your project.
-
-```shell
-yarn dev
-```
-
-### Open the code and start customizing
-
-Your site is now running at http://localhost:8000!
-
-# Payment integrations
-
-By default this starter supports the following payment integrations
-
-- [Stripe](https://stripe.com/)
-
-To enable the integrations you need to add the following to your `.env.local` file:
-
-```shell
-NEXT_PUBLIC_STRIPE_KEY=<your-stripe-public-key>
-```
-
-You'll also need to setup the integrations in your Medusa server. See the [Medusa documentation](https://docs.medusajs.com) for more information on how to configure [Stripe](https://docs.medusajs.com/resources/commerce-modules/payment/payment-provider/stripe#main).
-
-# Resources
-
-## Learn more about Medusa
-
-- [Website](https://www.medusajs.com/)
-- [GitHub](https://github.com/medusajs)
-- [Documentation](https://docs.medusajs.com/)
-
-## Learn more about Next.js
-
-- [Website](https://nextjs.org/)
-- [GitHub](https://github.com/vercel/next.js)
-- [Documentation](https://nextjs.org/docs)
+The Medusa JS client is configured in `src/lib/medusa-client.ts`. It uses the `MEDUSA_BACKEND_URL` and `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY` environment variables to connect to the Medusa backend. The client provides a simple and consistent way to interact with the Medusa API, abstracting away the complexities of making HTTP requests.
