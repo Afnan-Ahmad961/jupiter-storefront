@@ -1,7 +1,6 @@
 import { listProductsWithSort } from "@lib/data/products"
 import { getRegion } from "@lib/data/regions"
 import ProductPreview from "@modules/products/components/product-preview"
-import { Pagination } from "@modules/store/components/pagination"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 
 const PRODUCT_LIMIT = 12
@@ -81,11 +80,39 @@ export default async function PaginatedProducts({
         })}
       </ul>
       {totalPages > 1 && (
-        <Pagination
-          data-testid="product-pagination"
-          page={page}
-          totalPages={totalPages}
-        />
+        <div className="flex justify-center mt-12">
+          {/* Inlined Pagination component */}
+          <div className="flex gap-x-2">
+            {/* Previous page button */}
+            <a
+              href={`?page=${page - 1}`}
+              className="text-gray-500 hover:text-gray-700 disabled:text-gray-300"
+            >
+              {"<"}
+            </a>
+            {/* Page numbers */}
+            {Array.from({ length: totalPages }).map((_, i) => (
+              <a
+                key={i}
+                href={`?page=${i + 1}`}
+                className={
+                  i + 1 === page
+                    ? "text-black font-semibold"
+                    : "text-gray-500 hover:text-gray-700"
+                }
+              >
+                {i + 1}
+              </a>
+            ))}
+            {/* Next page button */}
+            <a
+              href={`?page=${page + 1}`}
+              className="text-gray-500 hover:text-gray-700 disabled:text-gray-300"
+            >
+              {">"}
+            </a>
+          </div>
+        </div>
       )}
     </>
   )
