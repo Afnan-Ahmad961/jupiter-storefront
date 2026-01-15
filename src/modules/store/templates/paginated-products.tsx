@@ -1,10 +1,9 @@
 import { listProductsWithSort } from "@lib/data/products"
 import { getRegion } from "@lib/data/regions"
-import ProductPreview from "@modules/products/components/product-preview"
-import { Pagination } from "@modules/store/components/pagination"
+import ProductList from "@modules/store/components/product-list"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 
-const PRODUCT_LIMIT = 12
+const PRODUCT_LIMIT = 10
 
 type PaginatedProductsParams = {
   limit: number
@@ -21,6 +20,7 @@ export default async function PaginatedProducts({
   categoryId,
   productsIds,
   countryCode,
+  q,
 }: {
   sortBy?: SortOptions
   page: number
@@ -28,9 +28,10 @@ export default async function PaginatedProducts({
   categoryId?: string
   productsIds?: string[]
   countryCode: string
+  q?: string
 }) {
-  const queryParams: PaginatedProductsParams = {
-    limit: 12,
+  const queryParams: any = {
+    limit: PRODUCT_LIMIT,
   }
 
   if (collectionId) {
@@ -43,6 +44,10 @@ export default async function PaginatedProducts({
 
   if (productsIds) {
     queryParams["id"] = productsIds
+  }
+
+  if (q) {
+    queryParams["q"] = q
   }
 
   if (sortBy === "created_at") {
@@ -64,29 +69,14 @@ export default async function PaginatedProducts({
     countryCode,
   })
 
-  const totalPages = Math.ceil(count / PRODUCT_LIMIT)
-
   return (
-    <>
-      <ul
-        className="grid grid-cols-2 w-full small:grid-cols-3 medium:grid-cols-4 gap-x-6 gap-y-8"
-        data-testid="products-list"
-      >
-        {products.map((p) => {
-          return (
-            <li key={p.id}>
-              <ProductPreview product={p} region={region} />
-            </li>
-          )
-        })}
-      </ul>
-      {totalPages > 1 && (
-        <Pagination
-          data-testid="product-pagination"
-          page={page}
-          totalPages={totalPages}
-        />
-      )}
-    </>
+    <ProductList
+      initialProducts={products}
+      region={region}
+      count={count}
+      queryParams={queryParams}
+      sortBy={sortBy}
+      countryCode={countryCode}
+    />
   )
 }
