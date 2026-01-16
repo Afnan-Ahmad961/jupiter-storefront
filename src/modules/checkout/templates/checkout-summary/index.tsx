@@ -7,20 +7,22 @@ import Divider from "@modules/common/components/divider"
 
 const CheckoutSummary = ({ cart }: { cart: any }) => {
   return (
-    <div className="sticky top-0 flex flex-col-reverse small:flex-col gap-y-8 py-8 small:py-0 ">
-      <div className="w-full bg-white flex flex-col">
-        <Divider className="my-6 small:hidden" />
+    <div className="sticky top-0 flex flex-col-reverse small:flex-col gap-y-8 py-12 px-6 small:px-12 h-screen overflow-y-auto">
+      <div className="w-full flex flex-col">
         <Heading
           level="h2"
-          className="flex flex-row text-3xl-regular items-baseline"
+          className="flex flex-row text-2xl-regular items-baseline mb-6"
         >
-          In your Cart
+          Order Summary
         </Heading>
-        <Divider className="my-6" />
-        <CartTotals totals={cart} />
-        <ItemsPreviewTemplate cart={cart} />
-        <div className="my-6">
-          <DiscountCode cart={cart} />
+        <div className="flex flex-col gap-y-4">
+          <CartTotals totals={cart} />
+          <Divider className="my-2" />
+          <ItemsPreviewTemplate cart={cart} />
+          <Divider className="my-2" />
+          <div className="py-2">
+            <DiscountCode cart={cart} />
+          </div>
         </div>
       </div>
     </div>

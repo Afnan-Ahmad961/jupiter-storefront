@@ -9,6 +9,7 @@ import ErrorMessage from "@modules/checkout/components/error-message"
 import PaymentContainer, {
   StripeCardContainer,
 } from "@modules/checkout/components/payment-container"
+import PaymentButton from "../payment-button"
 import Divider from "@modules/common/components/divider"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
@@ -41,11 +42,9 @@ const Payment = ({
   const setPaymentMethod = async (method: string) => {
     setError(null)
     setSelectedPaymentMethod(method)
-    if (isStripeLike(method)) {
-      await initiatePaymentSession(cart, {
-        provider_id: method,
-      })
-    }
+    await initiatePaymentSession(cart, {
+      provider_id: method,
+    })
   }
 
   const paidByGiftcard =
@@ -86,12 +85,7 @@ const Payment = ({
       }
 
       if (!shouldInputCard) {
-        return router.push(
-          pathname + "?" + createQueryString("step", "review"),
-          {
-            scroll: false,
-          }
-        )
+        return
       }
     } catch (err: any) {
       setError(err.message)
@@ -183,21 +177,31 @@ const Payment = ({
             data-testid="payment-method-error-message"
           />
 
-          <Button
-            size="large"
-            className="mt-6"
-            onClick={handleSubmit}
-            isLoading={isLoading}
-            disabled={
-              (isStripeLike(selectedPaymentMethod) && !cardComplete) ||
-              (!selectedPaymentMethod && !paidByGiftcard)
-            }
-            data-testid="submit-payment-button"
-          >
-            {!activeSession && isStripeLike(selectedPaymentMethod)
-              ? " Enter card details"
-              : "Continue to review"}
-          </Button>
+          {selectedPaymentMethod && (
+            (activeSession?.provider_id === selectedPaymentMethod && (!isStripeLike(selectedPaymentMethod) || cardComplete)) ? (
+              <PaymentButton
+                cart={cart}
+                data-testid="submit-order-button"
+                className="mt-6"
+              />
+            ) : (
+              <Button
+                size="large"
+                className="mt-6"
+                onClick={handleSubmit}
+                isLoading={isLoading}
+                disabled={
+                  (isStripeLike(selectedPaymentMethod) && !cardComplete) ||
+                  (!selectedPaymentMethod && !paidByGiftcard)
+                }
+                data-testid="submit-payment-button"
+              >
+                {isStripeLike(selectedPaymentMethod)
+                  ? "Enter card details"
+                  : "Confirm payment method"}
+              </Button>
+            )
+          )}
         </div>
 
         <div className={isOpen ? "hidden" : "block"}>
@@ -251,7 +255,6 @@ const Payment = ({
           ) : null}
         </div>
       </div>
-      <Divider className="mt-8" />
     </div>
   )
 }
