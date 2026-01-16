@@ -15,6 +15,7 @@ import {
 } from "./cookies"
 import { getRegion } from "./regions"
 import { getLocale } from "@lib/data/locale-actions"
+import { listCartShippingMethods } from "./fulfillment"
 
 /**
  * Retrieves a cart by its ID. If no ID is provided, it will use the cart ID from the cookies.
@@ -24,7 +25,7 @@ import { getLocale } from "@lib/data/locale-actions"
 export async function retrieveCart(cartId?: string, fields?: string) {
   const id = cartId || (await getCartId())
   fields ??=
-    "*items, *region, *items.product, *items.variant, *items.thumbnail, *items.metadata, +items.total, *promotions, +shipping_methods.name"
+    "*items, *region, *items.product, *items.variant, *items.thumbnail, *items.metadata, +items.total, *promotions, *shipping_methods"
 
   if (!id) {
     return null
@@ -241,6 +242,10 @@ export async function initiatePaymentSession(
   cart: HttpTypes.StoreCart,
   data: HttpTypes.StoreInitializePaymentSession
 ) {
+  if (!cart.id) {
+    throw new Error("No cart ID found when initiating payment session")
+  }
+
   const headers = {
     ...(await getAuthHeaders()),
   }
@@ -339,7 +344,7 @@ export async function setAddresses(currentState: unknown, formData: FormData) {
     if (!formData) {
       throw new Error("No form data found when setting addresses")
     }
-    const cartId = getCartId()
+    const cartId = await getCartId()
     if (!cartId) {
       throw new Error("No existing cart found when setting addresses")
     }
@@ -361,9 +366,9 @@ export async function setAddresses(currentState: unknown, formData: FormData) {
     } as any
 
     const sameAsBilling = formData.get("same_as_billing")
-    if (sameAsBilling === "on") data.billing_address = data.shipping_address
-
-    if (sameAsBilling !== "on")
+    if (sameAsBilling === "on" || sameAsBilling === "true" || sameAsBilling === "") {
+      data.billing_address = data.shipping_address
+    } else {
       data.billing_address = {
         first_name: formData.get("billing_address.first_name"),
         last_name: formData.get("billing_address.last_name"),
@@ -376,13 +381,22 @@ export async function setAddresses(currentState: unknown, formData: FormData) {
         province: formData.get("billing_address.province"),
         phone: formData.get("billing_address.phone"),
       }
+    }
     await updateCart(data)
+
+    const shippingMethods = await listCartShippingMethods(cartId)
+    if (shippingMethods && shippingMethods.length > 0) {
+      await setShippingMethod({
+        cartId,
+        shippingMethodId: shippingMethods[0].id,
+      })
+    }
   } catch (e: any) {
     return e.message
   }
 
   redirect(
-    `/${formData.get("shipping_address.country_code")}/checkout?step=delivery`
+    `/${formData.get("shipping_address.country_code")}/checkout?step=payment`
   )
 }
 
@@ -455,6 +469,10 @@ export async function updateRegion(countryCode: string, currentPath: string) {
 
 export async function listCartOptions() {
   const cartId = await getCartId()
+  if (!cartId) {
+    return { shipping_options: [] }
+  }
+
   const headers = {
     ...(await getAuthHeaders()),
   }

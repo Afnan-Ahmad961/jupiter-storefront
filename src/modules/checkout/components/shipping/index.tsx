@@ -70,11 +70,11 @@ const Shipping: React.FC<ShippingProps> = ({
 
   const isOpen = searchParams.get("step") === "delivery"
 
-  const _shippingMethods = availableShippingMethods?.filter(
+  const _shippingMethods = (availableShippingMethods as any[])?.filter(
     (sm) => sm.service_zone?.fulfillment_set?.type !== "pickup"
   )
 
-  const _pickupMethods = availableShippingMethods?.filter(
+  const _pickupMethods = (availableShippingMethods as any[])?.filter(
     (sm) => sm.service_zone?.fulfillment_set?.type === "pickup"
   )
 
@@ -150,37 +150,6 @@ const Shipping: React.FC<ShippingProps> = ({
 
   return (
     <div className="bg-white">
-      <div className="flex flex-row items-center justify-between mb-6">
-        <Heading
-          level="h2"
-          className={clx(
-            "flex flex-row text-3xl-regular gap-x-2 items-baseline",
-            {
-              "opacity-50 pointer-events-none select-none":
-                !isOpen && cart.shipping_methods?.length === 0,
-            }
-          )}
-        >
-          Delivery
-          {!isOpen && (cart.shipping_methods?.length ?? 0) > 0 && (
-            <CheckCircleSolid />
-          )}
-        </Heading>
-        {!isOpen &&
-          cart?.shipping_address &&
-          cart?.billing_address &&
-          cart?.email && (
-            <Text>
-              <button
-                onClick={handleEdit}
-                className="text-ui-fg-interactive hover:text-ui-fg-interactive-hover"
-                data-testid="edit-delivery-button"
-              >
-                Edit
-              </button>
-            </Text>
-          )}
-      </div>
       {isOpen ? (
         <>
           <div className="grid">
@@ -188,8 +157,8 @@ const Shipping: React.FC<ShippingProps> = ({
               <span className="font-medium txt-medium text-ui-fg-base">
                 Shipping method
               </span>
-              <span className="mb-4 text-ui-fg-muted txt-medium">
-                How would you like you order delivered
+              <span className="mb-6 text-ui-fg-muted txt-medium">
+                Choose how you would like your order delivered.
               </span>
             </div>
             <div data-testid="delivery-options-container">
@@ -342,7 +311,7 @@ const Shipping: React.FC<ShippingProps> = ({
                               </span>
                               <span className="text-base-regular text-ui-fg-muted">
                                 {formatAddress(
-                                  option.service_zone?.fulfillment_set?.location
+                                  (option as any).service_zone?.fulfillment_set?.location
                                     ?.address
                                 )}
                               </span>
@@ -399,9 +368,9 @@ const Shipping: React.FC<ShippingProps> = ({
             )}
           </div>
         </div>
-      )}
-      <Divider className="mt-8" />
-    </div>
+      )
+      }
+    </div >
   )
 }
 
