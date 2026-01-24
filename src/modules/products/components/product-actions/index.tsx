@@ -41,12 +41,12 @@ export default function ProductActions({
   const countryCode = useParams().countryCode as string
 
   // Preselect the first variant options by default
-  useEffect(() => {
-    if (product.variants?.length && !Object.keys(options).length) {
-      const variantOptions = optionsAsKeymap(product.variants[0].options)
-      setOptions(variantOptions ?? {})
-    }
-  }, [product.id, options])
+  // useEffect(() => {
+  //   if (product.variants?.length && !Object.keys(options).length) {
+  //     const variantOptions = optionsAsKeymap(product.variants[0].options)
+  //     setOptions(variantOptions ?? {})
+  //   }
+  // }, [product.id, options])
 
   const selectedVariant = useMemo(() => {
     if (!product.variants || product.variants.length === 0) {

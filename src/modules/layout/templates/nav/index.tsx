@@ -10,8 +10,10 @@ import { HttpTypes } from "@medusajs/types"
 
 export default function Nav({
   cart,
+  customer,
 }: {
   cart?: HttpTypes.StoreCart | null
+  customer?: HttpTypes.StoreCustomer | null
 }) {
   const [isScrolled, setIsScrolled] = useState(false)
 
@@ -39,7 +41,7 @@ export default function Nav({
           {/* Left - Menu */}
           <div className="flex-1 basis-0 h-full flex items-center">
             <div className="h-full">
-              <SideMenu />
+              <SideMenu customer={customer} />
             </div>
           </div>
 
