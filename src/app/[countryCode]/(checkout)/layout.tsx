@@ -9,29 +9,24 @@ export default function CheckoutLayout({
 }) {
   return (
     <div className="w-full bg-white relative small:min-h-screen">
-      <div className="h-16 bg-white border-b ">
+      <div className="h-20 bg-white border-b border-gray-100">
         <nav className="flex h-full items-center content-container justify-between">
           <LocalizedClientLink
-            href="/cart"
-            className="text-small-semi text-ui-fg-base flex items-center gap-x-2 uppercase flex-1 basis-0"
-            data-testid="back-to-cart-link"
-          >
-            <ChevronDown className="rotate-90" size={16} />
-            <span className="mt-px hidden small:block txt-compact-plus text-ui-fg-subtle hover:text-ui-fg-base ">
-              Back to shopping cart
-            </span>
-            <span className="mt-px block small:hidden txt-compact-plus text-ui-fg-subtle hover:text-ui-fg-base">
-              Back
-            </span>
-          </LocalizedClientLink>
-          <LocalizedClientLink
             href="/"
-            className="txt-compact-xlarge-plus text-ui-fg-subtle hover:text-ui-fg-base uppercase"
+            className="text-2xl text-ui-fg-base uppercase tracking-widest"
             data-testid="store-link"
           >
-            Medusa Store
+            JUPITER
           </LocalizedClientLink>
-          <div className="flex-1 basis-0" />
+          <LocalizedClientLink
+            href="/cart"
+            className="text-small-semi text-ui-fg-base flex items-center gap-x-2 uppercase text-gray-500 hover:text-black transition-colors"
+            data-testid="back-to-cart-link"
+          >
+            <span className="hidden small:block txt-compact-plus hover:text-ui-fg-base ">
+              Back to Cart
+            </span>
+          </LocalizedClientLink>
         </nav>
       </div>
       <div className="relative" data-testid="checkout-container">{children}</div>

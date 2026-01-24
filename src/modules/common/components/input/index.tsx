@@ -44,7 +44,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             name={name}
             placeholder=" "
             required={required}
-            className="pt-4 pb-1 block w-full h-11 px-4 mt-0 bg-ui-bg-field border rounded-md appearance-none focus:outline-none focus:ring-0 focus:shadow-borders-interactive-with-active border-ui-border-base hover:bg-ui-bg-field-hover"
+            className="pt-4 pb-1 block w-full h-11 px-4 mt-0 bg-white border border-gray-200 rounded appearance-none focus:outline-none focus:ring-0 focus:border-black hover:bg-gray-50 transition-all duration-200"
             {...props}
             ref={inputRef}
           />
