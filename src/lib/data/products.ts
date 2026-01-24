@@ -63,12 +63,12 @@ export const listProducts = async ({
           offset,
           region_id: region?.id,
           fields:
-            "*variants.calculated_price,+variants.inventory_quantity,*variants.images,+metadata,+tags,",
+            "*images,*variants.calculated_price,+variants.inventory_quantity,*variants.images,+metadata,+tags",
           ...queryParams,
         },
         headers,
         next,
-        cache: "force-cache",
+        cache: "no-store",
       }
     )
     .then(({ products, count }) => {
@@ -109,7 +109,7 @@ export const listProductsWithSort = async ({
   const {
     response: { products, count },
   } = await listProducts({
-    pageParam: 0,
+    pageParam: 1,
     queryParams: {
       ...queryParams,
       limit: 100,
@@ -119,11 +119,11 @@ export const listProductsWithSort = async ({
 
   const sortedProducts = sortProducts(products, sortBy)
 
-  const pageParam = (page - 1) * limit
+  const offset = (page - 1) * limit
 
-  const nextPage = count > pageParam + limit ? pageParam + limit : null
+  const nextPage = count > offset + limit ? page + 1 : null
 
-  const paginatedProducts = sortedProducts.slice(pageParam, pageParam + limit)
+  const paginatedProducts = sortedProducts.slice(offset, offset + limit)
 
   return {
     response: {
