@@ -40,13 +40,13 @@ export default function ProductActions({
   const [isAdding, setIsAdding] = useState(false)
   const countryCode = useParams().countryCode as string
 
-  // If there is only 1 variant, preselect the options
+  // Preselect the first variant options by default
   useEffect(() => {
-    if (product.variants?.length === 1) {
+    if (product.variants?.length && !Object.keys(options).length) {
       const variantOptions = optionsAsKeymap(product.variants[0].options)
       setOptions(variantOptions ?? {})
     }
-  }, [product.variants])
+  }, [product.id, options])
 
   const selectedVariant = useMemo(() => {
     if (!product.variants || product.variants.length === 0) {
@@ -114,7 +114,7 @@ export default function ProductActions({
 
     // Otherwise, we can't add to cart
     return false
-  }, [selectedVariant])
+  }, [selectedVariant, options])
 
   const actionsRef = useRef<HTMLDivElement>(null)
 
@@ -175,11 +175,11 @@ export default function ProductActions({
           isLoading={isAdding}
           data-testid="add-product-button"
         >
-          {!selectedVariant && !options
-            ? "Select Size"
-            : !inStock || !isValidVariant
-              ? "Out of stock"
-              : "Add to cart"}
+          {!selectedVariant
+            ? "Select Options"
+            : !inStock
+              ? "Out of Stock"
+              : "Add to Cart"}
         </Button>
         <MobileActions
           product={product}

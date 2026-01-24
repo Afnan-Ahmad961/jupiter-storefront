@@ -22,6 +22,7 @@ const ImageGallery = ({ images }: ImageGalleryProps) => {
                 src={image.url}
                 alt={`Thumbnail ${index + 1}`}
                 fill
+                sizes="16vw"
                 style={{ objectFit: "cover" }}
               />
             )}
