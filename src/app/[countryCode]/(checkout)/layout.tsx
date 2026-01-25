@@ -19,12 +19,12 @@ export default function CheckoutLayout({
             JUPITER
           </LocalizedClientLink>
           <LocalizedClientLink
-            href="/cart"
+            href="/store"
             className="text-small-semi text-ui-fg-base flex items-center gap-x-2 uppercase text-gray-500 hover:text-black transition-colors"
             data-testid="back-to-cart-link"
           >
             <span className="hidden small:block txt-compact-plus hover:text-ui-fg-base ">
-              Back to Cart
+              Back to Store
             </span>
           </LocalizedClientLink>
         </nav>
