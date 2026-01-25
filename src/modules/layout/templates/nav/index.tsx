@@ -5,13 +5,15 @@ import Link from "next/link"
 import { ShoppingBag, User } from "lucide-react"
 import { Suspense } from "react"
 import SideMenu from "@modules/layout/components/side-menu"
-import CartDropdown from "@modules/layout/components/cart-dropdown"
+import CartDrawer from "@modules/layout/components/cart-drawer"
 import { HttpTypes } from "@medusajs/types"
 
 export default function Nav({
   cart,
+  customer,
 }: {
   cart?: HttpTypes.StoreCart | null
+  customer?: HttpTypes.StoreCustomer | null
 }) {
   const [isScrolled, setIsScrolled] = useState(false)
 
@@ -39,7 +41,7 @@ export default function Nav({
           {/* Left - Menu */}
           <div className="flex-1 basis-0 h-full flex items-center">
             <div className="h-full">
-              <SideMenu />
+              <SideMenu customer={customer} />
             </div>
           </div>
 
@@ -67,20 +69,19 @@ export default function Nav({
               </Link>
             </div>
 
-            {/* Cart Button with Dropdown */}
-            <div className="h-full mt-10">
-              <CartDropdown cart={cart}>
-                <Link
-                  className="hover:text-[#cd3b13] flex gap-2 transition-colors relative"
-                  href="/cart"
+            {/* Cart Button with Drawer */}
+            <div className="h-full flex items-center">
+              <CartDrawer cart={cart}>
+                <div
+                  className="hover:text-[#cd3b13] flex gap-2 transition-colors relative group-hover:text-[#cd3b13]"
                   data-testid="nav-cart-link"
                 >
                   <ShoppingBag size={20} />
                   <span className="absolute -top-2 -right-2 bg-[#cd3b13] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-semibold">
                     {totalItems}
                   </span>
-                </Link>
-              </CartDropdown>
+                </div>
+              </CartDrawer>
             </div>
           </div>
         </nav>
