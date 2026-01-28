@@ -32,11 +32,11 @@ export default function ProductPreview({
   return (
     <Link href={`/products/${product.handle}`} className="group box-border">
       <div data-testid="product-wrapper" className="relative">
-        <div className="relative overflow-hidden bg-ui-bg-subtle aspect-[9/12]">
+        <div className="relative overflow-hidden bg-ui-bg-subtle aspect-[1/1]">
           <Thumbnail
             thumbnail={product.thumbnail}
             images={product.images}
-            size="full"
+            size="square"
             isFeatured={isFeatured}
             className="!rounded-none !shadow-none !p-0"
           />

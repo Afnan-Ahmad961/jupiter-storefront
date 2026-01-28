@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 import { listProducts } from "@lib/data/products"
 import ProductCarousel from "@modules/home/components/product-carousel"
-import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import Link from "next/link"
 
 export default async function Home(props: {
   params: Promise<{ countryCode: string }>
@@ -45,12 +45,12 @@ export default async function Home(props: {
         <div className="py-12 flex flex-col items-center">
           <ProductCarousel products={products} region={region} />
           <div className="mt-8">
-            <LocalizedClientLink
+            <Link
               href="/store"
               className="px-12 py-4 border border-gray-200 text-black text-[12px] font-bold uppercase tracking-[0.2em] hover:bg-black hover:text-white transition-colors duration-300 inline-block"
             >
               Shop All
-            </LocalizedClientLink>
+            </Link>
           </div>
         </div>
       )}
