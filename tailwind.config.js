@@ -60,15 +60,13 @@ module.exports = {
       },
       fontFamily: {
         sans: [
-          "Inter",
-          "-apple-system",
-          "BlinkMacSystemFont",
-          "Segoe UI",
-          "Roboto",
+          "Proxima Nova",
           "Helvetica Neue",
-          "Ubuntu",
+          "Helvetica",
+          "Arial",
           "sans-serif",
         ],
+        serif: ["Georgia", "serif"],
       },
       keyframes: {
         ring: {

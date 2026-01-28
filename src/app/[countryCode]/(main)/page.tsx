@@ -11,6 +11,10 @@ export const metadata: Metadata = {
     "A performant frontend ecommerce starter template with Next.js 15 and Medusa.",
 }
 
+import { listProducts } from "@lib/data/products"
+import ProductCarousel from "@modules/home/components/product-carousel"
+import Link from "next/link"
+
 export default async function Home(props: {
   params: Promise<{ countryCode: string }>
 }) {
@@ -20,22 +24,36 @@ export default async function Home(props: {
 
   const region = await getRegion(countryCode)
 
-  const { collections } = await listCollections({
-    fields: "id, handle, title",
-  })
-
-  if (!collections || !region) {
+  if (!region) {
     return null
   }
+
+  const {
+    response: { products },
+  } = await listProducts({
+    regionId: region.id,
+    queryParams: {
+      limit: 10,
+      fields: "*variants.calculated_price",
+    },
+  })
 
   return (
     <>
       <Hero />
-      <div className="py-12">
-        <ul className="flex flex-col gap-x-6">
-          <FeaturedProducts collections={collections} region={region} />
-        </ul>
-      </div>
+      {products && (
+        <div className="py-12 flex flex-col items-center">
+          <ProductCarousel products={products} region={region} />
+          <div className="mt-8">
+            <Link
+              href="/store"
+              className="px-12 py-4 border border-gray-200 text-black text-[12px] font-bold uppercase tracking-[0.2em] hover:bg-black hover:text-white transition-colors duration-300 inline-block"
+            >
+              Shop All
+            </Link>
+          </div>
+        </div>
+      )}
     </>
   )
 }

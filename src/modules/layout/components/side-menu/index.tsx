@@ -1,95 +1,163 @@
 "use client"
 
-import { Popover, PopoverPanel, Transition } from "@headlessui/react"
-import { Menu, X } from "lucide-react"
-import { Fragment, useState } from "react"
+import { Popover, PopoverPanel, Transition, Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/react"
+import { Menu, X, ChevronDown } from "lucide-react"
+import { Fragment, useEffect } from "react"
 import Link from "next/link"
+import { clx } from "@medusajs/ui"
+import { HttpTypes } from "@medusajs/types"
 
-const SideMenuItems = {
-  Home: "/",
-  Store: "/store",
-  Account: "/account",
-  Cart: "/cart",
-}
+const MainLinks = [
+  { name: "Home", href: "/" },
+  { name: "Store", href: "/store" },
+  { name: "About Us", href: "/store" },
+]
 
-const SideMenu = () => {
-  const [isOpen, setIsOpen] = useState(false)
+const CategoryLinks = [
+  { name: "Shop All", href: "/store" },
+  { name: "Apparel", href: "/store" },
+  { name: "Footwear", href: "/store" },
+  { name: "Accessories", href: "/store" },
+]
+
+const SideMenu = ({
+  customer,
+  onOpenChange,
+}: {
+  customer?: HttpTypes.StoreCustomer | null
+  onOpenChange?: (open: boolean) => void
+}) => {
+  // Lock body scroll when menu is open
+  const toggleScroll = (open: boolean) => {
+    if (open) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = "unset"
+    }
+  }
 
   return (
     <div className="h-full">
       <div className="flex items-center h-full">
         <Popover className="h-full flex">
-          {({ open, close }) => (
-            <>
-              <div className="relative flex h-full">
-                <Popover.Button
-                  data-testid="nav-menu-button"
-                  className="relative h-full flex items-center transition-all ease-out duration-200 focus:outline-none hover:text-[#cd3b13]"
-                  aria-label="Toggle menu"
-                >
-                  {open ? <X size={24} /> : <Menu size={24} />}
-                </Popover.Button>
-              </div>
+          {({ open, close }) => {
+            // Handle scroll lock and report state change
+            useEffect(() => {
+              toggleScroll(open)
+              onOpenChange?.(open)
+              return () => {
+                toggleScroll(false)
+                onOpenChange?.(false)
+              }
+            }, [open, onOpenChange])
 
-              {open && (
-                <div
-                  className="fixed inset-0 z-[50] bg-black/0 pointer-events-auto"
-                  onClick={close}
-                  data-testid="side-menu-backdrop"
-                />
-              )}
-
-              <Transition
-                show={open}
-                as={Fragment}
-                enter="transition ease-out duration-150"
-                enterFrom="opacity-0"
-                enterTo="opacity-100 backdrop-blur-2xl"
-                leave="transition ease-in duration-150"
-                leaveFrom="opacity-100 backdrop-blur-2xl"
-                leaveTo="opacity-0"
-              >
-                <PopoverPanel className="flex flex-col absolute w-full pr-4 sm:pr-0 sm:w-1/3 2xl:w-1/4 sm:min-w-min h-[calc(100vh-1rem)] z-[51] inset-x-0 text-sm text-white m-2 backdrop-blur-2xl">
-                  <div
-                    data-testid="nav-menu-popup"
-                    className="flex flex-col h-full bg-[rgba(3,7,18,0.5)] rounded-lg justify-between p-6"
+            return (
+              <>
+                <div className="relative flex h-full">
+                  <Popover.Button
+                    data-testid="nav-menu-button"
+                    className="relative h-full flex items-center transition-all ease-out duration-200 focus:outline-none hover:text-gray-500"
+                    aria-label="Toggle menu"
                   >
-                    <div className="flex justify-end" id="xmark">
-                      <button
-                        data-testid="close-menu-button"
-                        onClick={close}
-                        className="p-2 hover:text-[#cd3b13] transition-colors"
-                        aria-label="Close menu"
-                      >
-                        <X size={24} />
-                      </button>
-                    </div>
+                    {open ? <X size={24} /> : <Menu size={24} />}
+                  </Popover.Button>
+                </div>
 
-                    <ul className="flex flex-col gap-6 items-start justify-start">
-                      {Object.entries(SideMenuItems).map(([name, href]) => {
-                        return (
-                          <li key={name}>
+                <Transition
+                  show={open}
+                  as={Fragment}
+                  enter="transition ease-out duration-150"
+                  enterFrom="opacity-0 -translate-x-full"
+                  enterTo="opacity-100 translate-x-0"
+                  leave="transition ease-in duration-150"
+                  leaveFrom="opacity-100 translate-x-0"
+                  leaveTo="opacity-0 -translate-x-full"
+                >
+                  <PopoverPanel className="fixed top-16 bottom-0 left-0 w-full sm:w-[400px] z-[40] bg-white text-black border-r border-gray-100 shadow-xl overflow-hidden">
+                    <div
+                      data-testid="nav-menu-popup"
+                      className="flex flex-col h-full justify-between p-6 overflow-hidden"
+                    >
+                      <div className="flex-1 overflow-y-auto no-scrollbar">
+                        <ul className="flex flex-col gap-6 items-start justify-start mb-8">
+                          {MainLinks.map((item) => (
+                            <li key={item.name} className="w-full">
+                              <Link
+                                href={item.href}
+                                className="text-base uppercase tracking-widest font-medium hover:text-gray-500 transition-colors block w-full"
+                                onClick={close}
+                              >
+                                {item.name}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+
+                        <div className="flex flex-col gap-4 border-t border-gray-100 pt-6">
+                          {["Men", "Women"].map((category) => (
+                            <Disclosure key={category}>
+                              {({ open }) => (
+                                <>
+                                  <DisclosureButton className="flex justify-between items-center w-full text-base uppercase tracking-widest font-medium hover:text-gray-500 transition-colors py-2">
+                                    <span>{category}</span>
+                                    <ChevronDown
+                                      size={16}
+                                      className={clx("transition-transform duration-200", {
+                                        "rotate-180": open,
+                                      })}
+                                    />
+                                  </DisclosureButton>
+                                  <DisclosurePanel className="pl-4 flex flex-col gap-3 pb-2 text-gray-600">
+                                    {CategoryLinks.map((link) => (
+                                      <Link
+                                        key={link.name}
+                                        href={link.href}
+                                        className="text-sm uppercase tracking-wider hover:text-black transition-colors"
+                                        onClick={close}
+                                      >
+                                        {link.name}
+                                      </Link>
+                                    ))}
+                                  </DisclosurePanel>
+                                </>
+                              )}
+                            </Disclosure>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col gap-y-4 pt-6 border-t border-gray-100">
+                        <div className="text-sm">
+                          {customer ? (
+                            <div className="flex flex-col gap-1">
+                              <span className="text-gray-500">Signed in as:</span>
+                              <span className="font-medium">{customer.email}</span>
+                            </div>
+                          ) : (
                             <Link
-                              href={href}
-                              className="text-3xl leading-10 hover:text-[#cd3b13] transition-colors"
+                              href="/account/login"
+                              className="text-lg uppercase tracking-widest font-medium hover:text-gray-500 transition-colors"
                               onClick={close}
-                              data-testid={`${name.toLowerCase()}-link`}
                             >
-                              {name}
+                              Log In
                             </Link>
-                          </li>
-                        )
-                      })}
-                    </ul>
-
-                    <div className="flex flex-col gap-y-6">
-                      <div className="text-xs">© {new Date().getFullYear()} Jupiter Store. All rights reserved.</div>
+                          )}
+                        </div>
+                        <div className="text-[10px] uppercase tracking-widest text-gray-400 mt-2">© {new Date().getFullYear()} Jupiter</div>
+                      </div>
                     </div>
-                  </div>
-                </PopoverPanel>
-              </Transition>
-            </>
-          )}
+                  </PopoverPanel>
+                </Transition>
+
+                {open && (
+                  <div
+                    className="fixed inset-0 top-16 z-[30] bg-black/20 backdrop-blur-sm"
+                    onClick={close}
+                  />
+                )}
+              </>
+            )
+          }}
         </Popover>
       </div>
     </div>
