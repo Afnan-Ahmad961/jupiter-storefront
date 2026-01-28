@@ -5,6 +5,7 @@ import { HttpTypes } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import Thumbnail from "../thumbnail"
 import PreviewPrice from "./price"
+import Link from "next/link"
 
 export default function ProductPreview({
   product,
@@ -29,7 +30,7 @@ export default function ProductPreview({
   })
 
   return (
-    <LocalizedClientLink href={`/products/${product.handle}`} className="group box-border">
+    <Link href={`/products/${product.handle}`} className="group box-border">
       <div data-testid="product-wrapper" className="relative">
         <div className="relative overflow-hidden bg-ui-bg-subtle aspect-[9/12]">
           <Thumbnail
@@ -57,6 +58,6 @@ export default function ProductPreview({
           </div>
         </div>
       </div>
-    </LocalizedClientLink>
+    </Link>
   )
 }

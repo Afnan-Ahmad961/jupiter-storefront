@@ -76,7 +76,7 @@ const SideMenu = ({ customer }: { customer?: HttpTypes.StoreCustomer | null }) =
                             <li key={item.name} className="w-full">
                               <Link
                                 href={item.href}
-                                className="text-lg uppercase tracking-widest font-medium hover:text-gray-500 transition-colors block w-full"
+                                className="text-base uppercase tracking-widest font-medium hover:text-gray-500 transition-colors block w-full"
                                 onClick={close}
                               >
                                 {item.name}
@@ -90,7 +90,7 @@ const SideMenu = ({ customer }: { customer?: HttpTypes.StoreCustomer | null }) =
                             <Disclosure key={category}>
                               {({ open }) => (
                                 <>
-                                  <DisclosureButton className="flex justify-between items-center w-full text-lg uppercase tracking-widest font-medium hover:text-gray-500 transition-colors py-2">
+                                  <DisclosureButton className="flex justify-between items-center w-full text-base uppercase tracking-widest font-medium hover:text-gray-500 transition-colors py-2">
                                     <span>{category}</span>
                                     <ChevronDown
                                       size={16}
