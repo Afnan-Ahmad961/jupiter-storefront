@@ -40,13 +40,13 @@ export default function ProductActions({
   const [isAdding, setIsAdding] = useState(false)
   const countryCode = useParams().countryCode as string
 
-  // If there is only 1 variant, preselect the options
-  useEffect(() => {
-    if (product.variants?.length === 1) {
-      const variantOptions = optionsAsKeymap(product.variants[0].options)
-      setOptions(variantOptions ?? {})
-    }
-  }, [product.variants])
+  // Preselect the first variant options by default
+  // useEffect(() => {
+  //   if (product.variants?.length && !Object.keys(options).length) {
+  //     const variantOptions = optionsAsKeymap(product.variants[0].options)
+  //     setOptions(variantOptions ?? {})
+  //   }
+  // }, [product.id, options])
 
   const selectedVariant = useMemo(() => {
     if (!product.variants || product.variants.length === 0) {
@@ -114,7 +114,7 @@ export default function ProductActions({
 
     // Otherwise, we can't add to cart
     return false
-  }, [selectedVariant])
+  }, [selectedVariant, options])
 
   const actionsRef = useRef<HTMLDivElement>(null)
 
@@ -155,7 +155,6 @@ export default function ProductActions({
                   </div>
                 )
               })}
-              <Divider />
             </div>
           )}
         </div>
@@ -172,15 +171,15 @@ export default function ProductActions({
             !isValidVariant
           }
           variant="primary"
-          className="w-full h-10"
+          className="w-full h-12 bg-black text-white rounded-none uppercase font-bold tracking-widest hover:bg-black/90 transition-colors duration-150"
           isLoading={isAdding}
           data-testid="add-product-button"
         >
-          {!selectedVariant && !options
-            ? "Select variant"
-            : !inStock || !isValidVariant
-            ? "Out of stock"
-            : "Add to cart"}
+          {!selectedVariant
+            ? "Select Options"
+            : !inStock
+              ? "Out of Stock"
+              : "Add to Cart"}
         </Button>
         <MobileActions
           product={product}

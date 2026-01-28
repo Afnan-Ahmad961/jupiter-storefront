@@ -1,63 +1,114 @@
-import { Suspense } from "react"
+"use client"
 
-import { listRegions } from "@lib/data/regions"
-import { listLocales } from "@lib/data/locales"
-import { getLocale } from "@lib/data/locale-actions"
-import { StoreRegion } from "@medusajs/types"
-import LocalizedClientLink from "@modules/common/components/localized-client-link"
-import CartButton from "@modules/layout/components/cart-button"
+import { useEffect, useState } from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { ShoppingBag, User } from "lucide-react"
 import SideMenu from "@modules/layout/components/side-menu"
+import CartDrawer from "@modules/layout/components/cart-drawer"
+import { HttpTypes } from "@medusajs/types"
 
-export default async function Nav() {
-  const [regions, locales, currentLocale] = await Promise.all([
-    listRegions().then((regions: StoreRegion[]) => regions),
-    listLocales(),
-    getLocale(),
-  ])
+export default function Nav({
+  cart,
+  customer,
+}: {
+  cart?: HttpTypes.StoreCart | null
+  customer?: HttpTypes.StoreCustomer | null
+}) {
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isSideMenuOpen, setIsSideMenuOpen] = useState(false)
+  const [isCartDrawerOpen, setIsCartDrawerOpen] = useState(false)
+  const pathname = usePathname()
+
+  const isHomePage = pathname === "/" || pathname === "/en" || pathname === "/us" // Basic check, better if customized per region
+  // More robust home page check for Medusa structure:
+  const isHome = pathname.split("/").filter(Boolean).length <= 1
+
+  const totalItems =
+    cart?.items?.reduce((acc, item) => {
+      return acc + item.quantity
+    }, 0) || 0
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50)
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
+  const shouldBeSolid = isScrolled || !isHome || isSideMenuOpen || isCartDrawerOpen
 
   return (
-    <div className="sticky top-0 inset-x-0 z-50 group">
-      <header className="relative h-16 mx-auto border-b duration-200 bg-white border-ui-border-base">
-        <nav className="content-container txt-xsmall-plus text-ui-fg-subtle flex items-center justify-between w-full h-full text-small-regular">
+    <div
+      className={`top-0 inset-x-0 z-50 transition-all duration-300 ${isHome ? "fixed" : "sticky"
+        }`}
+    >
+      <header
+        className={`relative h-16 mx-auto border-b duration-300 transition-all ${shouldBeSolid
+          ? "bg-white border-gray-200 shadow-sm"
+          : "bg-transparent border-transparent"
+          }`}
+      >
+        <nav
+          className={`content-container flex items-center justify-between w-full h-full transition-colors duration-300 ${shouldBeSolid ? "text-gray-900" : "text-white"
+            }`}
+        >
+          {/* Left - Menu */}
           <div className="flex-1 basis-0 h-full flex items-center">
             <div className="h-full">
-              <SideMenu regions={regions} locales={locales} currentLocale={currentLocale} />
+              <SideMenu
+                customer={customer}
+                onOpenChange={(open) => setIsSideMenuOpen(open)}
+              />
             </div>
           </div>
 
+          {/* Center - Logo */}
           <div className="flex items-center h-full">
-            <LocalizedClientLink
+            <Link
               href="/"
-              className="txt-compact-xlarge-plus hover:text-ui-fg-base uppercase"
+              className="text-2xl font-bold tracking-widest uppercase transition-colors"
               data-testid="nav-store-link"
             >
-              Medusa Store
-            </LocalizedClientLink>
+              Jupiter
+            </Link>
           </div>
 
+          {/* Right - Account & Cart */}
           <div className="flex items-center gap-x-6 h-full flex-1 basis-0 justify-end">
+            {/* Desktop Account Link */}
             <div className="hidden small:flex items-center gap-x-6 h-full">
-              <LocalizedClientLink
-                className="hover:text-ui-fg-base"
+              <Link
+                className="hover:opacity-70 transition-opacity flex items-center gap-2"
                 href="/account"
                 data-testid="nav-account-link"
               >
-                Account
-              </LocalizedClientLink>
+                <User size={20} />
+              </Link>
             </div>
-            <Suspense
-              fallback={
-                <LocalizedClientLink
-                  className="hover:text-ui-fg-base flex gap-2"
-                  href="/cart"
+
+            {/* Cart Button with Drawer */}
+            <div className="h-full flex items-center">
+              <CartDrawer
+                cart={cart}
+                onOpenChange={(open) => setIsCartDrawerOpen(open)}
+              >
+                <div
+                  className="flex gap-2 transition-opacity relative hover:opacity-70 cursor-pointer"
                   data-testid="nav-cart-link"
                 >
-                  Cart (0)
-                </LocalizedClientLink>
-              }
-            >
-              <CartButton />
-            </Suspense>
+                  <ShoppingBag size={20} />
+                  <span
+                    className={`absolute -top-2 -right-2 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-bold transition-colors ${shouldBeSolid ? "bg-[#cd3b13]" : "bg-black"
+                      }`}
+                  >
+                    {totalItems}
+                  </span>
+                </div>
+              </CartDrawer>
+            </div>
           </div>
         </nav>
       </header>

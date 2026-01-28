@@ -23,6 +23,7 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
   "data-testid": dataTestid,
 }) => {
   const initialImage = thumbnail || images?.[0]?.url
+  const secondaryImage = images && images.length > 1 ? images[1].url : null
 
   return (
     <Container
@@ -41,29 +42,49 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
       )}
       data-testid={dataTestid}
     >
-      <ImageOrPlaceholder image={initialImage} size={size} />
+      <ImageOrPlaceholder image={initialImage} secondaryImage={secondaryImage} size={size} />
     </Container>
   )
 }
 
 const ImageOrPlaceholder = ({
   image,
+  secondaryImage,
   size,
-}: Pick<ThumbnailProps, "size"> & { image?: string }) => {
-  return image ? (
-    <Image
-      src={image}
-      alt="Thumbnail"
-      className="absolute inset-0 object-cover object-center"
-      draggable={false}
-      quality={50}
-      sizes="(max-width: 576px) 280px, (max-width: 768px) 360px, (max-width: 992px) 480px, 800px"
-      fill
-    />
-  ) : (
-    <div className="w-full h-full absolute inset-0 flex items-center justify-center">
-      <PlaceholderImage size={size === "small" ? 16 : 24} />
-    </div>
+}: Pick<ThumbnailProps, "size"> & { image?: string; secondaryImage?: string | null }) => {
+  if (!image) {
+    return (
+      <div className="w-full h-full absolute inset-0 flex items-center justify-center">
+        <PlaceholderImage size={size === "small" ? 16 : 24} />
+      </div>
+    )
+  }
+
+  return (
+    <>
+      <Image
+        src={image}
+        alt="Thumbnail"
+        className={clx("absolute inset-0 object-cover object-center transition-opacity duration-300", {
+          "group-hover:opacity-0": !!secondaryImage,
+        })}
+        draggable={false}
+        quality={50}
+        sizes="(max-width: 576px) 280px, (max-width: 768px) 360px, (max-width: 992px) 480px, 800px"
+        fill
+      />
+      {secondaryImage && (
+        <Image
+          src={secondaryImage}
+          alt="Secondary Thumbnail"
+          className="absolute inset-0 object-cover object-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          draggable={false}
+          quality={50}
+          sizes="(max-width: 576px) 280px, (max-width: 768px) 360px, (max-width: 992px) 480px, 800px"
+          fill
+        />
+      )}
+    </>
   )
 }
 

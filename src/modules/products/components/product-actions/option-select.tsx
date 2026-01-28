@@ -23,9 +23,18 @@ const OptionSelect: React.FC<OptionSelectProps> = ({
 
   return (
     <div className="flex flex-col gap-y-3">
-      <span className="text-sm">Select {title}</span>
+      <div className="flex items-center justify-between">
+        <span className="text-xs uppercase font-bold tracking-tight">
+          {title}
+        </span>
+        {title.toLowerCase() === "size" && (
+          <button className="text-[10px] uppercase font-bold tracking-tight underline">
+            View Size Guide
+          </button>
+        )}
+      </div>
       <div
-        className="flex flex-wrap justify-between gap-2"
+        className="flex flex-wrap gap-2"
         data-testid={dataTestId}
       >
         {filteredOptions.map((v) => {
@@ -34,11 +43,10 @@ const OptionSelect: React.FC<OptionSelectProps> = ({
               onClick={() => updateOption(option.id, v)}
               key={v}
               className={clx(
-                "border-ui-border-base bg-ui-bg-subtle border text-small-regular h-10 rounded-rounded p-2 flex-1 ",
+                "border-ui-border-base border text-[11px] h-9 min-w-[40px] px-3 flex items-center justify-center transition-all duration-200 uppercase tracking-widest hover:border-black",
                 {
-                  "border-ui-border-interactive": v === current,
-                  "hover:shadow-elevation-card-rest transition-shadow ease-in-out duration-150":
-                    v !== current,
+                  "border-black bg-black text-white": v === current,
+                  "text-ui-fg-base bg-transparent": v !== current,
                 }
               )}
               disabled={disabled}

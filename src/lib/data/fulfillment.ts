@@ -5,6 +5,10 @@ import { HttpTypes } from "@medusajs/types"
 import { getAuthHeaders, getCacheOptions } from "./cookies"
 
 export const listCartShippingMethods = async (cartId: string) => {
+  if (!cartId) {
+    return []
+  }
+
   const headers = {
     ...(await getAuthHeaders()),
   }

@@ -1,51 +1,55 @@
-"use client"
-
-import repeat from "@lib/util/repeat"
 import { HttpTypes } from "@medusajs/types"
-import { Table, clx } from "@medusajs/ui"
+import { Text, clx } from "@medusajs/ui"
+import Thumbnail from "@modules/products/components/thumbnail"
+import { convertToLocale } from "@lib/util/money"
 
-import Item from "@modules/cart/components/item"
-import SkeletonLineItem from "@modules/skeletons/components/skeleton-line-item"
+const ItemsPreviewTemplate = ({
+    cart,
+}: {
+    cart: HttpTypes.StoreCart
+}) => {
+    const items = cart.items
 
-type ItemsTemplateProps = {
-  cart: HttpTypes.StoreCart
-}
-
-const ItemsPreviewTemplate = ({ cart }: ItemsTemplateProps) => {
-  const items = cart.items
-  const hasOverflow = items && items.length > 4
-
-  return (
-    <div
-      className={clx({
-        "pl-[1px] overflow-y-scroll overflow-x-hidden no-scrollbar max-h-[420px]":
-          hasOverflow,
-      })}
-    >
-      <Table>
-        <Table.Body data-testid="items-table">
-          {items
-            ? items
+    return (
+        <div className="flex flex-col gap-y-4">
+            {items && items.length > 0 && items
                 .sort((a, b) => {
-                  return (a.created_at ?? "") > (b.created_at ?? "") ? -1 : 1
+                    return (a.created_at ?? "") > (b.created_at ?? "") ? -1 : 1
                 })
-                .map((item) => {
-                  return (
-                    <Item
-                      key={item.id}
-                      item={item}
-                      type="preview"
-                      currencyCode={cart.currency_code}
-                    />
-                  )
-                })
-            : repeat(5).map((i) => {
-                return <SkeletonLineItem key={i} />
-              })}
-        </Table.Body>
-      </Table>
-    </div>
-  )
+                .map((item) => (
+                    <div key={item.id} className="flex gap-x-4">
+                        <div className="w-[80px] aspect-square bg-gray-50 flex-shrink-0">
+                            <Thumbnail
+                                thumbnail={item.thumbnail}
+                                size="square"
+                                className="object-cover w-full h-full"
+                            />
+                        </div>
+                        <div className="flex flex-col flex-1 justify-between">
+                            <div className="flex flex-col">
+                                <Text className="text-[12px] font-bold uppercase tracking-widest text-black">
+                                    {item.product_title}
+                                </Text>
+                                <Text className="text-[12px] text-gray-500 mt-1 uppercase">
+                                    {item.variant?.title}
+                                </Text>
+                                <Text className="text-[12px] text-gray-400 mt-0.5">
+                                    Quantity: {item.quantity}
+                                </Text>
+                            </div>
+                            <div className="flex justify-start mt-1">
+                                <Text className="text-[12px] font-bold text-black">
+                                    {convertToLocale({
+                                        amount: item.unit_price,
+                                        currency_code: cart.currency_code,
+                                    })}
+                                </Text>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+        </div>
+    )
 }
 
 export default ItemsPreviewTemplate
