@@ -20,8 +20,13 @@ const CategoryLinks = [
   { name: "Accessories", href: "/store" },
 ]
 
-const SideMenu = ({ customer }: { customer?: HttpTypes.StoreCustomer | null }) => {
-
+const SideMenu = ({
+  customer,
+  onOpenChange,
+}: {
+  customer?: HttpTypes.StoreCustomer | null
+  onOpenChange?: (open: boolean) => void
+}) => {
   // Lock body scroll when menu is open
   const toggleScroll = (open: boolean) => {
     if (open) {
@@ -36,12 +41,15 @@ const SideMenu = ({ customer }: { customer?: HttpTypes.StoreCustomer | null }) =
       <div className="flex items-center h-full">
         <Popover className="h-full flex">
           {({ open, close }) => {
-
-            // Handle scroll lock side effect
+            // Handle scroll lock and report state change
             useEffect(() => {
               toggleScroll(open)
-              return () => toggleScroll(false)
-            }, [open])
+              onOpenChange?.(open)
+              return () => {
+                toggleScroll(false)
+                onOpenChange?.(false)
+              }
+            }, [open, onOpenChange])
 
             return (
               <>
