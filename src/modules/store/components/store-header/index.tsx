@@ -4,7 +4,8 @@ import { HttpTypes } from "@medusajs/types"
 import { clx } from "@medusajs/ui"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useCallback, useState, useEffect } from "react"
-import { Search, Filter } from "lucide-react"
+import { Search, Filter, X } from "lucide-react"
+import { useDebouncedCallback } from "use-debounce"
 
 type StoreHeaderProps = {
     categories: HttpTypes.StoreProductCategory[]
@@ -19,11 +20,18 @@ const StoreHeader = ({ categories }: StoreHeaderProps) => {
     const [activeCategory, setActiveCategory] = useState(searchParams.get("category_id") || "")
     const [isFilterOpen, setIsFilterOpen] = useState(false)
 
-    // Sync state with URL params
+    // Sync search value from URL only when it changes externally
     useEffect(() => {
-        setSearchValue(searchParams.get("q") || "")
+        const urlQ = searchParams.get("q") || ""
+        if (urlQ !== searchValue) {
+            setSearchValue(urlQ)
+        }
+    }, [searchParams.get("q")])
+
+    // Sync active category from URL
+    useEffect(() => {
         setActiveCategory(searchParams.get("category_id") || "")
-    }, [searchParams])
+    }, [searchParams.get("category_id")])
 
     const createQueryString = useCallback(
         (paramsToUpdate: Record<string, string | null>) => {
@@ -40,10 +48,14 @@ const StoreHeader = ({ categories }: StoreHeaderProps) => {
         [searchParams]
     )
 
-    const handleSearch = (e: React.FormEvent) => {
-        e.preventDefault()
-        const query = createQueryString({ q: searchValue || null, page: "1" })
-        router.push(`${pathname}?${query}`)
+    const debouncedSearch = useDebouncedCallback((value: string) => {
+        const query = createQueryString({ q: value || null, page: "1" })
+        router.replace(`${pathname}?${query}`, { scroll: false })
+    }, 500)
+
+    const onSearchChange = (value: string) => {
+        setSearchValue(value)
+        debouncedSearch(value)
     }
 
     const handleCategorySelect = (id: string) => {
@@ -55,27 +67,27 @@ const StoreHeader = ({ categories }: StoreHeaderProps) => {
     }
 
     return (
-        <div className="w-full flex flex-col gap-y-6 mb-12">
-            <div className="flex items-center justify-between gap-x-4">
-                <form onSubmit={handleSearch} className="relative flex-1 max-w-md">
+        <div className="w-full flex flex-col gap-y-4 mb-20 pt-4">
+            <div className="flex items-center justify-between gap-x-8">
+                <div className="relative w-full max-w-[300px]">
+                    <Search className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-500" size={15} />
                     <input
                         type="text"
-                        placeholder={activeCategory ? "Search in category..." : "Search products..."}
-                        className="w-full h-10 pl-10 pr-4 bg-ui-bg-subtle border border-ui-border-base rounded-none text-sm focus:outline-none focus:border-black transition-colors duration-150"
+                        placeholder={activeCategory ? "SEARCH IN CATEGORY" : "SEARCH PRODUCTS"}
+                        className="w-full h-9 pl-6 pr-4 bg-white border-b border-gray-300 rounded-none text-[10px] uppercase tracking-[0.2em] focus:outline-none focus:border-black transition-colors duration-150 placeholder:text-gray-400"
                         value={searchValue}
-                        onChange={(e) => setSearchValue(e.target.value)}
+                        onChange={(e) => onSearchChange(e.target.value)}
                     />
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-ui-fg-muted" size={18} />
-                </form>
+                </div>
 
                 <div className="relative">
                     <button
                         onClick={() => setIsFilterOpen(!isFilterOpen)}
-                        className="flex items-center gap-x-2 h-10 px-4 border border-ui-border-base bg-white hover:bg-ui-bg-subtle transition-colors duration-150 text-xs uppercase font-bold tracking-widest"
+                        className="flex items-center gap-x-2 h-9 px-4 border border-gray-300 bg-white hover:bg-black hover:text-white transition-all duration-200 text-[10px] uppercase font-medium tracking-[0.2em]"
                     >
-                        <Filter size={16} />
-                        Filter
-                        {activeCategory && <span className="ml-1 w-2 h-2 bg-black rounded-full" />}
+                        <Filter size={12} strokeWidth={1.5} />
+                        FILTER
+                        {activeCategory && <span className="ml-1 w-1.5 h-1.5 bg-black rounded-full" />}
                     </button>
 
                     {isFilterOpen && (
@@ -84,17 +96,18 @@ const StoreHeader = ({ categories }: StoreHeaderProps) => {
                                 className="fixed inset-0 z-40 bg-black/5"
                                 onClick={() => setIsFilterOpen(false)}
                             />
-                            <div className="absolute right-0 mt-2 w-64 bg-white border border-ui-border-base shadow-lg z-50 py-2">
-                                <div className="px-4 py-2 text-[10px] uppercase font-bold tracking-widest text-ui-fg-muted border-b border-ui-border-base mb-2">
-                                    Categories
+                            <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 shadow-sm z-50 py-3">
+                                <div className="px-5 py-2 text-[10px] uppercase font-bold tracking-[0.2em] text-gray-500 border-b border-gray-100 mb-3">
+                                    Browse Categories
                                 </div>
-                                <div className="max-h-64 overflow-y-auto">
+                                <div className="max-h-64 overflow-y-auto px-1">
                                     <button
                                         onClick={() => handleCategorySelect("")}
                                         className={clx(
-                                            "w-full text-left px-4 py-2 text-xs hover:bg-ui-bg-subtle transition-colors duration-150",
+                                            "w-full text-left px-4 py-2 text-[11px] uppercase tracking-widest hover:bg-gray-50 transition-colors duration-150",
                                             {
-                                                "font-bold": activeCategory === ""
+                                                "font-bold text-black": activeCategory === "",
+                                                "text-gray-700": activeCategory !== ""
                                             }
                                         )}
                                     >
@@ -105,10 +118,10 @@ const StoreHeader = ({ categories }: StoreHeaderProps) => {
                                             key={category.id}
                                             onClick={() => handleCategorySelect(category.id)}
                                             className={clx(
-                                                "w-full text-left px-4 py-2 text-xs hover:bg-ui-bg-subtle transition-colors duration-150",
+                                                "w-full text-left px-4 py-2 text-[11px] uppercase tracking-widest hover:bg-gray-50 transition-colors duration-150",
                                                 {
                                                     "font-bold text-black": activeCategory === category.id,
-                                                    "text-ui-fg-subtle": activeCategory !== category.id,
+                                                    "text-gray-700": activeCategory !== category.id,
                                                 }
                                             )}
                                         >
@@ -123,17 +136,19 @@ const StoreHeader = ({ categories }: StoreHeaderProps) => {
             </div>
 
             {activeCategory && (
-                <div className="flex items-center gap-x-2">
-                    <span className="text-xs text-ui-fg-muted">Category:</span>
-                    <span className="text-xs font-bold uppercase tracking-widest px-2 py-1 bg-ui-bg-subtle border border-ui-border-base rounded-none">
-                        {categories.find(c => c.id === activeCategory)?.name}
-                    </span>
-                    <button
-                        onClick={() => handleCategorySelect("")}
-                        className="text-[10px] uppercase underline text-ui-fg-muted hover:text-black ml-2"
-                    >
-                        Clear
-                    </button>
+                <div className="flex items-center gap-x-3 mt-2">
+                    <span className="text-[10px] uppercase tracking-widest text-gray-500">Filtering by:</span>
+                    <div className="flex items-center gap-x-2 bg-gray-50 px-3 py-1.5 border border-gray-200">
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-black">
+                            {categories.find(c => c.id === activeCategory)?.name}
+                        </span>
+                        <button
+                            onClick={() => handleCategorySelect("")}
+                            className="hover:opacity-60 transition-opacity"
+                        >
+                            <X size={12} className="text-gray-500" />
+                        </button>
+                    </div>
                 </div>
             )}
         </div>

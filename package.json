@@ -31,6 +31,7 @@
     "react-dom": "19.0.3",
     "server-only": "^0.0.1",
     "tailwindcss-radix": "^2.8.0",
+    "use-debounce": "^10.1.0",
     "webpack": "^5"
   },
   "devDependencies": {
