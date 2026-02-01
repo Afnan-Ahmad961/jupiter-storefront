@@ -2,6 +2,8 @@ import { HttpTypes } from "@medusajs/types"
 import { clx } from "@medusajs/ui"
 import React from "react"
 
+import SizeGuide from "../size-guide"
+
 type OptionSelectProps = {
   option: HttpTypes.StoreProductOption
   current: string | undefined
@@ -20,6 +22,7 @@ const OptionSelect: React.FC<OptionSelectProps> = ({
   disabled,
 }) => {
   const filteredOptions = (option.values ?? []).map((v) => v.value)
+  const [isSizeGuideOpen, setIsSizeGuideOpen] = React.useState(false)
 
   return (
     <div className="flex flex-col gap-y-3">
@@ -28,9 +31,15 @@ const OptionSelect: React.FC<OptionSelectProps> = ({
           {title}
         </span>
         {title.toLowerCase() === "size" && (
-          <button className="text-[10px] uppercase font-bold tracking-tight underline">
-            View Size Guide
-          </button>
+          <>
+            <button
+              onClick={() => setIsSizeGuideOpen(true)}
+              className="text-[10px] uppercase font-bold tracking-tight underline"
+            >
+              View Size Guide
+            </button>
+            <SizeGuide isOpen={isSizeGuideOpen} close={() => setIsSizeGuideOpen(false)} />
+          </>
         )}
       </div>
       <div

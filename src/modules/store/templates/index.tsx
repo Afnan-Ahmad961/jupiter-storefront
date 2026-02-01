@@ -31,7 +31,7 @@ const StoreTemplate = async ({
     >
       <StoreHeader categories={categories} />
       <div className="w-full">
-        <Suspense fallback={<SkeletonProductGrid />}>
+        <Suspense key={`${categoryId}-${q}-${sortBy}-${page}`} fallback={<SkeletonProductGrid />}>
           <PaginatedProducts
             sortBy={sort}
             page={pageNumber}

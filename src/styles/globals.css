@@ -125,7 +125,7 @@
   h4,
   h5,
   h6 {
-    font-family: theme("fontFamily.serif");
+    font-family: Georgia, serif;
     font-weight: 400;
   }
 }

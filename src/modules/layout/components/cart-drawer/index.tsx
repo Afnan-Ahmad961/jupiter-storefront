@@ -87,7 +87,7 @@ const CartDrawer = ({ cart, children }: { cart?: HttpTypes.StoreCart | null, chi
                                     leaveFrom="translate-x-0"
                                     leaveTo="translate-x-full"
                                 >
-                                    <Dialog.Panel className="pointer-events-auto w-screen max-w-[700px]">
+                                    <Dialog.Panel className="pointer-events-auto w-screen max-w-[560px]">
                                         <div className="flex h-full flex-col bg-white shadow-xl">
                                             {/* Header */}
                                             <div className="flex items-center justify-between px-8 py-6 border-b border-gray-100">
