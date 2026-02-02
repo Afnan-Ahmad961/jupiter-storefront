@@ -10,62 +10,69 @@ type ShippingDetailsProps = {
 
 const ShippingDetails = ({ order }: ShippingDetailsProps) => {
   return (
-    <div>
-      <Heading level="h2" className="flex flex-row text-3xl-regular my-6">
+    <div className="flex flex-col gap-6 w-full">
+      <h2 className="text-base font-bold uppercase tracking-widest text-gray-900 border-b border-gray-200 pb-2">
         Delivery
-      </Heading>
-      <div className="flex items-start gap-x-8">
+      </h2>
+      <div className="flex flex-col gap-8">
         <div
-          className="flex flex-col w-1/3"
+          className="flex flex-col gap-2"
           data-testid="shipping-address-summary"
         >
-          <Text className="txt-medium-plus text-ui-fg-base mb-1">
+          <span className="text-xs font-bold uppercase tracking-widest text-gray-500">
             Shipping Address
-          </Text>
-          <Text className="txt-medium text-ui-fg-subtle">
-            {order.shipping_address?.first_name}{" "}
-            {order.shipping_address?.last_name}
-          </Text>
-          <Text className="txt-medium text-ui-fg-subtle">
-            {order.shipping_address?.address_1}{" "}
-            {order.shipping_address?.address_2}
-          </Text>
-          <Text className="txt-medium text-ui-fg-subtle">
-            {order.shipping_address?.postal_code},{" "}
-            {order.shipping_address?.city}
-          </Text>
-          <Text className="txt-medium text-ui-fg-subtle">
-            {order.shipping_address?.country_code?.toUpperCase()}
-          </Text>
+          </span>
+          <div className="flex flex-col text-sm text-gray-900">
+            <span>
+              {order.shipping_address?.first_name}{" "}
+              {order.shipping_address?.last_name}
+            </span>
+            <span>
+              {order.shipping_address?.address_1}{" "}
+              {order.shipping_address?.address_2}
+            </span>
+            <span>
+              {order.shipping_address?.postal_code},{" "}
+              {order.shipping_address?.city}
+            </span>
+            <span>
+              {order.shipping_address?.country_code?.toUpperCase()}
+            </span>
+          </div>
         </div>
 
         <div
-          className="flex flex-col w-1/3 "
+          className="flex flex-col gap-2"
           data-testid="shipping-contact-summary"
         >
-          <Text className="txt-medium-plus text-ui-fg-base mb-1">Contact</Text>
-          <Text className="txt-medium text-ui-fg-subtle">
-            {order.shipping_address?.phone}
-          </Text>
-          <Text className="txt-medium text-ui-fg-subtle">{order.email}</Text>
+          <span className="text-xs font-bold uppercase tracking-widest text-gray-500">
+            Contact
+          </span>
+          <div className="flex flex-col text-sm text-gray-900">
+            <span>{order.shipping_address?.phone}</span>
+            <span>{order.email}</span>
+          </div>
         </div>
 
         <div
-          className="flex flex-col w-1/3"
+          className="flex flex-col gap-2"
           data-testid="shipping-method-summary"
         >
-          <Text className="txt-medium-plus text-ui-fg-base mb-1">Method</Text>
-          <Text className="txt-medium text-ui-fg-subtle">
-            {(order as any).shipping_methods[0]?.name} (
-            {convertToLocale({
-              amount: order.shipping_methods?.[0].total ?? 0,
-              currency_code: order.currency_code,
-            })}
-            )
-          </Text>
+          <span className="text-xs font-bold uppercase tracking-widest text-gray-500">
+            Method
+          </span>
+          <div className="text-sm text-gray-900">
+            <span>
+              {(order as any).shipping_methods[0]?.name} (
+              {convertToLocale({
+                amount: order.shipping_methods?.[0].total ?? 0,
+                currency_code: order.currency_code,
+              })}
+              )
+            </span>
+          </div>
         </div>
       </div>
-      <Divider className="mt-8" />
     </div>
   )
 }

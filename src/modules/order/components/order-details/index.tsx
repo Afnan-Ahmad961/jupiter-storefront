@@ -14,48 +14,55 @@ const OrderDetails = ({ order, showStatus }: OrderDetailsProps) => {
   }
 
   return (
-    <div>
-      <Text>
-        We have sent the order confirmation details to{" "}
-        <span
-          className="text-ui-fg-medium-plus font-semibold"
-          data-testid="order-email"
-        >
-          {order.email}
+    <div className="flex flex-col gap-6 md:flex-row md:justify-between md:items-start text-sm">
+      <div className="flex flex-col gap-1">
+        <span className="text-xs uppercase tracking-widest text-gray-500">
+          Order Number
         </span>
-        .
-      </Text>
-      <Text className="mt-2">
-        Order date:{" "}
-        <span data-testid="order-date">
+        <span className="font-medium text-gray-900" data-testid="order-id">
+          #{order.display_id}
+        </span>
+      </div>
+
+      <div className="flex flex-col gap-1">
+        <span className="text-xs uppercase tracking-widest text-gray-500">
+          Order Date
+        </span>
+        <span className="font-medium text-gray-900" data-testid="order-date">
           {new Date(order.created_at).toDateString()}
         </span>
-      </Text>
-      <Text className="mt-2 text-ui-fg-interactive">
-        Order number: <span data-testid="order-id">{order.display_id}</span>
-      </Text>
-
-      <div className="flex items-center text-compact-small gap-x-4 mt-4">
-        {showStatus && (
-          <>
-            <Text>
-              Order status:{" "}
-              <span className="text-ui-fg-subtle " data-testid="order-status">
-                {formatStatus(order.fulfillment_status)}
-              </span>
-            </Text>
-            <Text>
-              Payment status:{" "}
-              <span
-                className="text-ui-fg-subtle "
-                sata-testid="order-payment-status"
-              >
-                {formatStatus(order.payment_status)}
-              </span>
-            </Text>
-          </>
-        )}
       </div>
+
+      <div className="flex flex-col gap-1">
+        <span className="text-xs uppercase tracking-widest text-gray-500">
+          Email
+        </span>
+        <span className="font-medium text-gray-900 truncate max-w-[200px]" data-testid="order-email">
+          {order.email}
+        </span>
+      </div>
+
+      {showStatus && (
+        <>
+          <div className="flex flex-col gap-1">
+            <span className="text-xs uppercase tracking-widest text-gray-500">
+              Order Status
+            </span>
+            <span className="font-medium text-gray-900" data-testid="order-status">
+              {formatStatus(order.fulfillment_status)}
+            </span>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <span className="text-xs uppercase tracking-widest text-gray-500">
+              Payment Status
+            </span>
+            <span className="font-medium text-gray-900" data-testid="order-payment-status">
+              {formatStatus(order.payment_status)}
+            </span>
+          </div>
+        </>
+      )}
     </div>
   )
 }
