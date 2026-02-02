@@ -125,7 +125,7 @@ const EditAddress: React.FC<EditAddressProps> = ({
         <Modal.Title>
           <Heading className="mb-2">Edit address</Heading>
         </Modal.Title>
-        <form action={formAction}>
+        <form action={formAction} className="flex flex-col h-full overflow-hidden">
           <input type="hidden" name="addressId" value={address.id} />
           <Modal.Body>
             <div className="grid grid-cols-1 gap-y-2">

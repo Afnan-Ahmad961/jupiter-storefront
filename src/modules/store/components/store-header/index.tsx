@@ -70,11 +70,11 @@ const StoreHeader = ({ categories }: StoreHeaderProps) => {
         <div className="w-full flex flex-col gap-y-4 mb-20 pt-4">
             <div className="flex items-center justify-between gap-x-8">
                 <div className="relative w-full max-w-[300px]">
-                    <Search className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-500" size={15} />
+                    <Search className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-600" size={15} />
                     <input
                         type="text"
                         placeholder={activeCategory ? "SEARCH IN CATEGORY" : "SEARCH PRODUCTS"}
-                        className="w-full h-9 pl-6 pr-4 bg-white border-b border-gray-300 rounded-none text-[10px] uppercase tracking-[0.2em] focus:outline-none focus:border-black transition-colors duration-150 placeholder:text-gray-400"
+                        className="w-full h-9 pl-6 pr-4 bg-white border-b border-gray-600 rounded-none text-[10px] uppercase tracking-[0.2em] focus:outline-none focus:border-black transition-colors duration-150 placeholder:text-gray-600"
                         value={searchValue}
                         onChange={(e) => onSearchChange(e.target.value)}
                     />
@@ -83,7 +83,7 @@ const StoreHeader = ({ categories }: StoreHeaderProps) => {
                 <div className="relative">
                     <button
                         onClick={() => setIsFilterOpen(!isFilterOpen)}
-                        className="flex items-center gap-x-2 h-9 px-4 border border-gray-300 bg-white hover:bg-black hover:text-white transition-all duration-200 text-[10px] uppercase font-medium tracking-[0.2em]"
+                        className="flex items-center gap-x-2 h-9 px-4 border text-gray-600 border-gray-600 bg-white hover:bg-black hover:text-white transition-all duration-200 text-[10px] uppercase font-medium tracking-[0.2em]"
                     >
                         <Filter size={12} strokeWidth={1.5} />
                         FILTER

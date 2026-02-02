@@ -14,27 +14,29 @@ const Items = ({ order }: ItemsProps) => {
   const items = order.items
 
   return (
-    <div className="flex flex-col">
-      <Divider className="!mb-0" />
-      <Table>
+    <div className="flex flex-col gap-4 mt-8">
+      <h2 className="text-base font-bold uppercase tracking-widest text-gray-900 border-b border-gray-200 pb-2">
+        Items
+      </h2>
+      <Table className="!w-full !border-0 !shadow-none">
         <Table.Body data-testid="products-table">
           {items?.length
             ? items
-                .sort((a, b) => {
-                  return (a.created_at ?? "") > (b.created_at ?? "") ? -1 : 1
-                })
-                .map((item) => {
-                  return (
-                    <Item
-                      key={item.id}
-                      item={item}
-                      currencyCode={order.currency_code}
-                    />
-                  )
-                })
+              .sort((a, b) => {
+                return (a.created_at ?? "") > (b.created_at ?? "") ? -1 : 1
+              })
+              .map((item) => {
+                return (
+                  <Item
+                    key={item.id}
+                    item={item}
+                    currencyCode={order.currency_code}
+                  />
+                )
+              })
             : repeat(5).map((i) => {
-                return <SkeletonLineItem key={i} />
-              })}
+              return <SkeletonLineItem key={i} />
+            })}
         </Table.Body>
       </Table>
     </div>
