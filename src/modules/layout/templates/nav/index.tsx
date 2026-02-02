@@ -11,9 +11,11 @@ import { HttpTypes } from "@medusajs/types"
 export default function Nav({
   cart,
   customer,
+  categories,
 }: {
   cart?: HttpTypes.StoreCart | null
   customer?: HttpTypes.StoreCustomer | null
+  categories: HttpTypes.StoreProductCategory[]
 }) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false)
@@ -60,6 +62,7 @@ export default function Nav({
             <div className="h-full">
               <SideMenu
                 customer={customer}
+                categories={categories}
                 onOpenChange={(open) => setIsSideMenuOpen(open)}
               />
             </div>
