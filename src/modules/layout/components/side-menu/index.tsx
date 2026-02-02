@@ -13,18 +13,13 @@ const MainLinks = [
   { name: "About Us", href: "/store" },
 ]
 
-const CategoryLinks = [
-  { name: "Shop All", href: "/store" },
-  { name: "Apparel", href: "/store" },
-  { name: "Footwear", href: "/store" },
-  { name: "Accessories", href: "/store" },
-]
-
 const SideMenu = ({
   customer,
+  categories,
   onOpenChange,
 }: {
   customer?: HttpTypes.StoreCustomer | null
+  categories: HttpTypes.StoreProductCategory[]
   onOpenChange?: (open: boolean) => void
 }) => {
   // Lock body scroll when menu is open
@@ -84,7 +79,7 @@ const SideMenu = ({
                             <li key={item.name} className="w-full">
                               <Link
                                 href={item.href}
-                                className="text-base uppercase tracking-widest font-medium hover:text-gray-500 transition-colors block w-full"
+                                className="text-base uppercase tracking-widest font-medium hover:underline underline-offset-4 block w-full"
                                 onClick={close}
                               >
                                 {item.name}
@@ -93,12 +88,12 @@ const SideMenu = ({
                           ))}
                         </ul>
 
-                        <div className="flex flex-col gap-4 border-t border-gray-100 pt-6">
+                        <div className="flex flex-col gap-4 border-t border-gray-300 pt-6">
                           {["Men", "Women"].map((category) => (
                             <Disclosure key={category}>
                               {({ open }) => (
                                 <>
-                                  <DisclosureButton className="flex justify-between items-center w-full text-base uppercase tracking-widest font-medium hover:text-gray-500 transition-colors py-2">
+                                  <DisclosureButton className="flex justify-between items-center w-full text-base uppercase tracking-widest font-medium hover:underline underline-offset-4 py-2">
                                     <span>{category}</span>
                                     <ChevronDown
                                       size={16}
@@ -108,11 +103,11 @@ const SideMenu = ({
                                     />
                                   </DisclosureButton>
                                   <DisclosurePanel className="pl-4 flex flex-col gap-3 pb-2 text-gray-600">
-                                    {CategoryLinks.map((link) => (
+                                    {categories?.map((link) => (
                                       <Link
-                                        key={link.name}
-                                        href={link.href}
-                                        className="text-sm uppercase tracking-wider hover:text-black transition-colors"
+                                        key={link.id}
+                                        href="/store"
+                                        className="text-sm uppercase tracking-wider hover:underline underline-offset-4"
                                         onClick={close}
                                       >
                                         {link.name}
@@ -136,7 +131,7 @@ const SideMenu = ({
                           ) : (
                             <Link
                               href="/account/login"
-                              className="text-lg uppercase tracking-widest font-medium hover:text-gray-500 transition-colors"
+                              className="text-lg uppercase tracking-widest font-medium hover:underline underline-offset-4"
                               onClick={close}
                             >
                               Log In

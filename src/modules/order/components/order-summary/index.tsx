@@ -18,14 +18,16 @@ const OrderSummary = ({ order }: OrderSummaryProps) => {
   }
 
   return (
-    <div>
-      <h2 className="text-base-semi">Order Summary</h2>
-      <div className="text-small-regular text-ui-fg-base my-2">
-        <div className="flex items-center justify-between text-base-regular text-ui-fg-base mb-2">
+    <div className="flex flex-col gap-6 w-full">
+      <h2 className="text-base font-bold uppercase tracking-widest text-gray-900 border-b border-gray-200 pb-2">
+        Summary
+      </h2>
+      <div className="flex flex-col gap-3 text-sm text-gray-900">
+        <div className="flex items-center justify-between">
           <span>Subtotal</span>
           <span>{getAmount(order.subtotal)}</span>
         </div>
-        <div className="flex flex-col gap-y-1">
+        <div className="flex flex-col gap-2">
           {order.discount_total > 0 && (
             <div className="flex items-center justify-between">
               <span>Discount</span>
@@ -34,7 +36,7 @@ const OrderSummary = ({ order }: OrderSummaryProps) => {
           )}
           {order.gift_card_total > 0 && (
             <div className="flex items-center justify-between">
-              <span>Discount</span>
+              <span>Gift Card</span>
               <span>- {getAmount(order.gift_card_total)}</span>
             </div>
           )}
@@ -47,8 +49,8 @@ const OrderSummary = ({ order }: OrderSummaryProps) => {
             <span>{getAmount(order.tax_total)}</span>
           </div>
         </div>
-        <div className="h-px w-full border-b border-gray-200 border-dashed my-4" />
-        <div className="flex items-center justify-between text-base-regular text-ui-fg-base mb-2">
+        <div className="h-px w-full bg-gray-200 my-2" />
+        <div className="flex items-center justify-between font-bold text-base">
           <span>Total</span>
           <span>{getAmount(order.total)}</span>
         </div>
