@@ -61,7 +61,7 @@ const AddAddress = ({
         <Modal.Title>
           <Heading className="mb-2">Add address</Heading>
         </Modal.Title>
-        <form action={formAction}>
+        <form action={formAction} className="flex flex-col h-full overflow-hidden">
           <Modal.Body>
             <div className="flex flex-col gap-y-2">
               <div className="grid grid-cols-2 gap-x-2">

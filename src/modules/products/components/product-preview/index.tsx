@@ -43,10 +43,10 @@ export default function ProductPreview({
         </div>
 
         <div className="mt-4 h-12 relative overflow-hidden">
-          <div className="flex flex-col gap-y-1 transition-transform duration-300 group-hover:-translate-y-full">
-            <Text className="text-sm font-medium text-ui-fg-base" data-testid="product-title">
+          <div className="flex flex-col gap-y-0.5 transition-transform duration-300 group-hover:-translate-y-full">
+            <h1 className=" font-medium text-ui-fg-base" data-testid="product-title">
               {product.title}
-            </Text>
+            </h1>
             <div className="flex items-center gap-x-2">
               {cheapestPrice && <PreviewPrice price={cheapestPrice} />}
             </div>
