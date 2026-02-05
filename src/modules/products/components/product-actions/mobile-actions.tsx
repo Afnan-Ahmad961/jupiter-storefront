@@ -118,16 +118,20 @@ const MobileActions: React.FC<MobileActionsProps> = ({
               </Button>}
               <Button
                 onClick={handleAddToCart}
-                disabled={!inStock || !variant}
+                disabled={!inStock || (!variant && !isSimple)}
                 className="w-full"
                 isLoading={isAdding}
                 data-testid="mobile-cart-button"
               >
-                {!variant
-                  ? "Select variant"
-                  : !inStock
-                  ? "Out of stock"
-                  : "Add to cart"}
+                {isSimple
+                  ? !inStock
+                    ? "Out of stock"
+                    : "Add to cart"
+                  : !variant
+                    ? "Select variant"
+                    : !inStock
+                      ? "Out of stock"
+                      : "Add to cart"}
               </Button>
             </div>
           </div>
