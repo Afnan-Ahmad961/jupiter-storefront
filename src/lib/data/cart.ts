@@ -54,40 +54,41 @@ export async function retrieveCart(cartId?: string, fields?: string) {
 }
 
 export async function getOrSetCart(countryCode: string) {
-  const region = await getRegion(countryCode)
+  // Fetch all independent data in parallel to reduce latency
+  const [region, cart, headers, locale] = await Promise.all([
+    getRegion(countryCode),
+    retrieveCart(undefined, "id,region_id"),
+    getAuthHeaders(),
+    getLocale(),
+  ])
 
   if (!region) {
     throw new Error(`Region not found for country code: ${countryCode}`)
   }
 
-  let cart = await retrieveCart(undefined, "id,region_id")
+  let currentCart = cart
 
-  const headers = {
-    ...(await getAuthHeaders()),
-  }
-
-  if (!cart) {
-    const locale = await getLocale()
+  if (!currentCart) {
     const cartResp = await sdk.store.cart.create(
       { region_id: region.id, locale: locale || undefined },
       {},
       headers
     )
-    cart = cartResp.cart
+    currentCart = cartResp.cart
 
-    await setCartId(cart.id)
+    await setCartId(currentCart.id)
 
     const cartCacheTag = await getCacheTag("carts")
     revalidateTag(cartCacheTag)
   }
 
-  if (cart && cart?.region_id !== region.id) {
-    await sdk.store.cart.update(cart.id, { region_id: region.id }, {}, headers)
+  if (currentCart && currentCart?.region_id !== region.id) {
+    await sdk.store.cart.update(currentCart.id, { region_id: region.id }, {}, headers)
     const cartCacheTag = await getCacheTag("carts")
     revalidateTag(cartCacheTag)
   }
 
-  return cart
+  return currentCart
 }
 
 export async function updateCart(data: HttpTypes.StoreUpdateCart) {
