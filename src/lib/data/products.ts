@@ -50,7 +50,7 @@ export const listProducts = async ({
   }
 
   const next = {
-    ...(await getCacheOptions("products")),
+    ...(await getCacheOptions("products", true)),
   }
 
   return sdk.client

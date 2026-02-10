@@ -14,7 +14,7 @@ export type Locale = {
  */
 export const listLocales = async (): Promise<Locale[] | null> => {
   const next = {
-    ...(await getCacheOptions("locales")),
+    ...(await getCacheOptions("locales", true)),
   }
 
   return sdk.client

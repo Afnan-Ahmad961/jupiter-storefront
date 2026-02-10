@@ -17,7 +17,7 @@ export const retrieveVariant = async (
   }
 
   const next = {
-    ...(await getCacheOptions("variants")),
+    ...(await getCacheOptions("variants", true)),
   }
 
   return await sdk.client

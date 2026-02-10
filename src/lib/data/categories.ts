@@ -4,7 +4,7 @@ import { getCacheOptions } from "./cookies"
 
 export const listCategories = async (query?: Record<string, any>) => {
   const next = {
-    ...(await getCacheOptions("categories")),
+    ...(await getCacheOptions("categories", true)),
   }
 
   const limit = query?.limit || 100
@@ -30,7 +30,7 @@ export const getCategoryByHandle = async (categoryHandle: string[]) => {
   const handle = `${categoryHandle.join("/")}`
 
   const next = {
-    ...(await getCacheOptions("categories")),
+    ...(await getCacheOptions("categories", true)),
   }
 
   return sdk.client
