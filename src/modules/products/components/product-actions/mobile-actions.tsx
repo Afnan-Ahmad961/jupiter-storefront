@@ -125,12 +125,12 @@ const MobileActions: React.FC<MobileActionsProps> = ({
               >
                 {isSimple
                   ? !inStock
-                    ? "Out of stock"
+                    ? "Out of Stock"
                     : "Add to cart"
                   : !variant
-                    ? "Select variant"
+                    ? "Select a variant"
                     : !inStock
-                      ? "Out of stock"
+                      ? "Out of Stock"
                       : "Add to cart"}
               </Button>
             </div>
