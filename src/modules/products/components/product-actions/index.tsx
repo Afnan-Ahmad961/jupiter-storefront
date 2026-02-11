@@ -42,7 +42,7 @@ export default function ProductActions({
 
   // Preselect the first variant options by default
   useEffect(() => {
-    if (product.variants?.length && !Object.keys(options).length) {
+    if (product.variants?.length === 1 && !Object.keys(options).length) {
       const variantOptions = optionsAsKeymap(product.variants[0].options)
       setOptions(variantOptions ?? {})
     }
@@ -175,8 +175,8 @@ export default function ProductActions({
           isLoading={isAdding}
           data-testid="add-product-button"
         >
-          {!selectedVariant
-            ? "Select Options"
+          {(product.variants?.length ?? 0) > 1 && !selectedVariant
+            ? "Select a variant"
             : !inStock
               ? "Out of Stock"
               : "Add to Cart"}
