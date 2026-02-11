@@ -6,7 +6,7 @@ import { getCacheOptions } from "./cookies"
 
 export const retrieveCollection = async (id: string) => {
   const next = {
-    ...(await getCacheOptions("collections")),
+    ...(await getCacheOptions("collections", true)),
   }
 
   return sdk.client
@@ -24,7 +24,7 @@ export const listCollections = async (
   queryParams: Record<string, string> = {}
 ): Promise<{ collections: HttpTypes.StoreCollection[]; count: number }> => {
   const next = {
-    ...(await getCacheOptions("collections")),
+    ...(await getCacheOptions("collections", true)),
   }
 
   queryParams.limit = queryParams.limit || "100"
@@ -46,7 +46,7 @@ export const getCollectionByHandle = async (
   handle: string
 ): Promise<HttpTypes.StoreCollection> => {
   const next = {
-    ...(await getCacheOptions("collections")),
+    ...(await getCacheOptions("collections", true)),
   }
 
   return sdk.client

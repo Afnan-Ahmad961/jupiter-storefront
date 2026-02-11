@@ -19,6 +19,19 @@ export const getAuthHeaders = async (): Promise<
 }
 
 export const getCacheTag = async (tag: string): Promise<string> => {
+  const globalTags = [
+    "products",
+    "regions",
+    "categories",
+    "collections",
+    "variants",
+    "locales",
+  ]
+
+  if (globalTags.some((t) => tag.startsWith(t))) {
+    return tag
+  }
+
   try {
     const cookies = await nextCookies()
     const cacheId = cookies.get("_medusa_cache_id")?.value
@@ -34,10 +47,15 @@ export const getCacheTag = async (tag: string): Promise<string> => {
 }
 
 export const getCacheOptions = async (
-  tag: string
+  tag: string,
+  isGlobal: boolean = false
 ): Promise<{ tags: string[] } | {}> => {
   if (typeof window !== "undefined") {
     return {}
+  }
+
+  if (isGlobal) {
+    return { tags: [tag] }
   }
 
   const cacheTag = await getCacheTag(tag)
