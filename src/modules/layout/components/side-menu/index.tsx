@@ -16,10 +16,12 @@ const MainLinks = [
 const SideMenu = ({
   customer,
   categories,
+  collections,
   onOpenChange,
 }: {
   customer?: HttpTypes.StoreCustomer | null
   categories: HttpTypes.StoreProductCategory[]
+  collections: HttpTypes.StoreCollection[]
   onOpenChange?: (open: boolean) => void
 }) => {
   // Lock body scroll when menu is open
@@ -118,6 +120,34 @@ const SideMenu = ({
                               )}
                             </Disclosure>
                           ))}
+
+                          <Disclosure>
+                            {({ open }) => (
+                              <>
+                                <DisclosureButton className="flex justify-between items-center w-full text-base uppercase tracking-widest font-medium hover:underline underline-offset-4 py-2">
+                                  <span>Collections</span>
+                                  <ChevronDown
+                                    size={16}
+                                    className={clx("transition-transform duration-200", {
+                                      "rotate-180": open,
+                                    })}
+                                  />
+                                </DisclosureButton>
+                                <DisclosurePanel className="pl-4 flex flex-col gap-3 pb-2 text-gray-600">
+                                  {collections?.map((collection) => (
+                                    <Link
+                                      key={collection.id}
+                                      href={`/collections/${collection.handle}`}
+                                      className="text-sm uppercase tracking-wider hover:underline underline-offset-4"
+                                      onClick={close}
+                                    >
+                                      {collection.title}
+                                    </Link>
+                                  ))}
+                                </DisclosurePanel>
+                              </>
+                            )}
+                          </Disclosure>
                         </div>
                       </div>
 
@@ -130,7 +160,7 @@ const SideMenu = ({
                             </div>
                           ) : (
                             <Link
-                              href="/account/login"
+                              href="/account"
                               className="text-lg uppercase tracking-widest font-medium hover:underline underline-offset-4"
                               onClick={close}
                             >

@@ -1,12 +1,13 @@
 import { Suspense } from "react"
 
 import SkeletonProductGrid from "@modules/skeletons/templates/skeleton-product-grid"
-import RefinementList from "@modules/store/components/refinement-list"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
+import StoreHeader from "@modules/store/components/store-header"
 import PaginatedProducts from "@modules/store/templates/paginated-products"
 import { HttpTypes } from "@medusajs/types"
+import { listCategories } from "@lib/data/categories"
 
-export default function CollectionTemplate({
+export default async function CollectionTemplate({
   sortBy,
   collection,
   page,
@@ -19,20 +20,18 @@ export default function CollectionTemplate({
 }) {
   const pageNumber = page ? parseInt(page) : 1
   const sort = sortBy || "created_at"
+  const categories = await listCategories()
 
   return (
-    <div className="flex flex-col small:flex-row small:items-start py-6 content-container">
-      <RefinementList sortBy={sort} />
+    <div
+      className="flex flex-col py-6 content-container"
+      data-testid="collection-container"
+    >
+      <StoreHeader categories={categories} collectionTitle={collection.title} />
       <div className="w-full">
-        <div className="mb-8 text-2xl-semi">
-          <h1>{collection.title}</h1>
-        </div>
         <Suspense
-          fallback={
-            <SkeletonProductGrid
-              numberOfProducts={collection.products?.length}
-            />
-          }
+          key={`${collection.id}-${sortBy}-${page}`}
+          fallback={<SkeletonProductGrid />}
         >
           <PaginatedProducts
             sortBy={sort}
