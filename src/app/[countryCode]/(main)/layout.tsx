@@ -6,6 +6,7 @@ import { getBaseURL } from "@lib/util/env"
 import { StoreCartShippingOption } from "@medusajs/types"
 import CartMismatchBanner from "@modules/layout/components/cart-mismatch-banner"
 import { listCategories } from "@lib/data/categories"
+import { listCollections } from "@lib/data/collections"
 import Footer from "@modules/layout/templates/footer"
 import Nav from "@modules/layout/templates/nav"
 import FreeShippingPriceNudge from "@modules/shipping/components/free-shipping-price-nudge"
@@ -25,11 +26,14 @@ export default async function PageLayout(props: { children: React.ReactNode }) {
     shippingOptions = shipping_options
   }
 
-  const categories = await listCategories()
+  const [categories, { collections }] = await Promise.all([
+    listCategories(),
+    listCollections(),
+  ])
 
   return (
     <>
-      <Nav cart={cart} customer={customer} categories={categories} />
+      <Nav cart={cart} customer={customer} categories={categories} collections={collections} />
       {customer && cart && (
         <CartMismatchBanner customer={customer} cart={cart} />
       )}

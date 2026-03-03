@@ -9,9 +9,10 @@ import { useDebouncedCallback } from "use-debounce"
 
 type StoreHeaderProps = {
     categories: HttpTypes.StoreProductCategory[]
+    collectionTitle?: string
 }
 
-const StoreHeader = ({ categories }: StoreHeaderProps) => {
+const StoreHeader = ({ categories, collectionTitle }: StoreHeaderProps) => {
     const router = useRouter()
     const pathname = usePathname()
     const searchParams = useSearchParams()
@@ -68,6 +69,11 @@ const StoreHeader = ({ categories }: StoreHeaderProps) => {
 
     return (
         <div className="w-full flex flex-col gap-y-4 mb-20 pt-4">
+            {collectionTitle && (
+                <div className="mb-4">
+                    <h1 className="text-2xl uppercase tracking-widest font-medium">{collectionTitle}</h1>
+                </div>
+            )}
             <div className="flex items-center justify-between gap-x-8">
                 <div className="relative w-full max-w-[300px]">
                     <Search className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-600" size={15} />

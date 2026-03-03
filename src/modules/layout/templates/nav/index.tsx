@@ -12,10 +12,12 @@ export default function Nav({
   cart,
   customer,
   categories,
+  collections,
 }: {
   cart?: HttpTypes.StoreCart | null
   customer?: HttpTypes.StoreCustomer | null
   categories: HttpTypes.StoreProductCategory[]
+  collections: HttpTypes.StoreCollection[]
 }) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false)
@@ -63,6 +65,7 @@ export default function Nav({
               <SideMenu
                 customer={customer}
                 categories={categories}
+                collections={collections}
                 onOpenChange={(open) => setIsSideMenuOpen(open)}
               />
             </div>
