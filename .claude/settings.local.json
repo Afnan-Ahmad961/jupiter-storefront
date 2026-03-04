@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find \"c:\\\\Users\\\\Afnan Ahmad\\\\Desktop\\\\Work\\\\jupiter\\\\jupiter-storefront/src/app/[countryCode]/\\(main\\)\" -maxdepth 2 -type d)"
+    ]
+  }
+}

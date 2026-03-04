@@ -1,7 +1,8 @@
 import { listCategories } from "@lib/data/categories"
 import { listCollections } from "@lib/data/collections"
-import LocalizedClientLink from "@modules/common/components/localized-client-link"
-import { Facebook, Instagram, Twitter, Youtube, ArrowRight } from "lucide-react"
+import Link from "@modules/common/components/localized-client-link"
+import { Facebook, Instagram, Twitter, Youtube } from "lucide-react"
+import NewsletterForm from "./newsletter-form"
 
 export default async function Footer() {
   // const { collections } = await listCollections({
@@ -16,13 +17,13 @@ export default async function Footer() {
         <div className="flex flex-col md:flex-row justify-between gap-x-12 gap-y-16">
           {/* Brand & Newsletter Section */}
           <div className="flex gap-8 items-center">
-            <LocalizedClientLink href="/" className="inline-block">
+            <Link href="/" className="inline-block">
               <img
                 src="/logo.jpeg"
                 alt="Jupiter"
                 className="h-20 w-auto object-contain rounded-full"
               />
-            </LocalizedClientLink>
+            </Link>
 
             <div className="flex flex-col gap-4 max-w-sm">
               <h1 className="text-xs font-bold uppercase tracking-widest text-gray-900">
@@ -31,16 +32,7 @@ export default async function Footer() {
               <p className="text-sm text-gray-500 leading-relaxed">
                 Stay updated with our latest collections, exclusive offers, and behind-the-scenes stories.
               </p>
-              <form className="flex items-center border-b border-gray-300 focus-within:border-black transition-colors py-2 max-w-xs">
-                <input
-                  type="email"
-                  placeholder="ENTER YOUR EMAIL"
-                  className="bg-transparent w-full outline-none text-xs uppercase tracking-wider placeholder:text-gray-400"
-                />
-                <button type="submit" className="ml-2 hover:opacity-70 transition-opacity">
-                  <ArrowRight size={16} />
-                </button>
-              </form>
+              <NewsletterForm />
             </div>
           </div>
 
@@ -54,12 +46,12 @@ export default async function Footer() {
               <ul className="flex flex-col gap-3">
                 {topCategories.map((c) => (
                   <li key={c.id}>
-                    <LocalizedClientLink
+                    <Link
                       href={`/categories/${c.handle}`}
                       className="text-sm text-gray-500 hover:text-black hover:underline underline-offset-4 transition-all"
                     >
                       {c.name}
-                    </LocalizedClientLink>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -72,19 +64,24 @@ export default async function Footer() {
               </h3>
               <ul className="flex flex-col gap-3">
                 <li>
-                  <LocalizedClientLink href="/about" className="text-sm text-gray-500 hover:text-black hover:underline underline-offset-4 transition-all">
+                  <Link href="/about" className="text-sm text-gray-500 hover:text-black hover:underline underline-offset-4 transition-all">
                     Our Story
-                  </LocalizedClientLink>
+                  </Link>
                 </li>
                 <li>
-                  <LocalizedClientLink href="/terms" className="text-sm text-gray-500 hover:text-black hover:underline underline-offset-4 transition-all">
+                  <Link href="/terms" className="text-sm text-gray-500 hover:text-black hover:underline underline-offset-4 transition-all">
                     Terms & Conditions
-                  </LocalizedClientLink>
+                  </Link>
                 </li>
                 <li>
-                  <LocalizedClientLink href="/privacy" className="text-sm text-gray-500 hover:text-black hover:underline underline-offset-4 transition-all">
+                  <Link href="/privacy" className="text-sm text-gray-500 hover:text-black hover:underline underline-offset-4 transition-all">
                     Privacy Policy
-                  </LocalizedClientLink>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/returns" className="text-sm text-gray-500 hover:text-black hover:underline underline-offset-4 transition-all">
+                    Returns & Exchanges
+                  </Link>
                 </li>
               </ul>
             </div>
