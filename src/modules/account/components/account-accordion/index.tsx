@@ -15,6 +15,7 @@ import ProfileBillingAddress from "@modules/account/components/profile-billing-a
 import AddressBook from "@modules/account/components/address-book"
 import OrderOverview from "@modules/account/components/order-overview"
 import TransferRequestForm from "@modules/account/components/transfer-request-form"
+import ProfilePassword from "../profile-password"
 
 type AccountAccordionProps = {
     customer: HttpTypes.StoreCustomer | null
@@ -70,6 +71,8 @@ const AccountAccordion = ({
                     {customer && <ProfileEmail customer={customer} />}
                     <Divider />
                     {customer && <ProfilePhone customer={customer} />}
+                    <Divider />
+                    <ProfilePassword />
                     <Divider />
                     {customer && <ProfileBillingAddress customer={customer} regions={regions} />}
                 </div>

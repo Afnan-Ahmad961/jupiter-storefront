@@ -158,6 +158,41 @@ export async function transferCart() {
   revalidateTag(cartCacheTag)
 }
 
+export async function requestPasswordReset(email: string) {
+  await sdk.auth.resetPassword("customer", "emailpass", {
+    identifier: email,
+  })
+}
+
+export async function resetPassword(
+  _currentState: unknown,
+  formData: FormData
+) {
+  const email = formData.get("email") as string
+  const token = formData.get("token") as string
+  const password = formData.get("password") as string
+  const confirmPassword = formData.get("confirm_password") as string
+
+  if (password !== confirmPassword) {
+    return "Passwords do not match."
+  }
+
+  if (password.length < 8) {
+    return "Password must be at least 8 characters."
+  }
+
+  try {
+    await sdk.auth.updateProvider(
+      "customer",
+      "emailpass",
+      { email, password },
+      token
+    )
+  } catch (error: any) {
+    return error.toString()
+  }
+}
+
 export const addCustomerAddress = async (
   currentState: Record<string, unknown>,
   formData: FormData
