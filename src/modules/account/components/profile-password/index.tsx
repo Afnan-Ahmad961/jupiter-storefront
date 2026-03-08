@@ -1,69 +1,33 @@
 "use client"
 
-import React, { useEffect, useActionState } from "react"
-import Input from "@modules/common/components/input"
-import AccountInfo from "../account-info"
-import { HttpTypes } from "@medusajs/types"
-import { toast } from "@medusajs/ui"
+import React from "react"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import { Button } from "@medusajs/ui"
 
-type MyInformationProps = {
-  customer: HttpTypes.StoreCustomer
-}
-
-const ProfilePassword: React.FC<MyInformationProps> = ({ customer }) => {
-  const [successState, setSuccessState] = React.useState(false)
-
-  // TODO: Add support for password updates
-  const updatePassword = async () => {
-    toast.info("Password update is not implemented")
-  }
-
-  const clearState = () => {
-    setSuccessState(false)
-  }
-
+const ProfilePassword = () => {
   return (
-    <form
-      action={updatePassword}
-      onReset={() => clearState()}
-      className="w-full"
-    >
-      <AccountInfo
-        label="Password"
-        currentInfo={
-          <span>The password is not shown for security reasons</span>
-        }
-        isSuccess={successState}
-        isError={false}
-        errorMessage={undefined}
-        clearState={clearState}
-        data-testid="account-password-editor"
-      >
-        <div className="grid grid-cols-2 gap-4">
-          <Input
-            label="Old password"
-            name="old_password"
-            required
-            type="password"
-            data-testid="old-password-input"
-          />
-          <Input
-            label="New password"
-            type="password"
-            name="new_password"
-            required
-            data-testid="new-password-input"
-          />
-          <Input
-            label="Confirm password"
-            type="password"
-            name="confirm_password"
-            required
-            data-testid="confirm-password-input"
-          />
+    <div className="text-small-regular" data-testid="account-password-editor">
+      <div className="flex items-end justify-between">
+        <div className="flex flex-col">
+          <span className="uppercase text-ui-fg-base">Password</span>
+          <div className="flex items-center flex-1 basis-0 justify-end gap-x-4">
+            <span>The password is not shown for security reasons</span>
+          </div>
         </div>
-      </AccountInfo>
-    </form>
+        <div>
+          <LocalizedClientLink href="/forgot-password">
+            <Button
+              variant="secondary"
+              className="w-[100px] min-h-[25px] py-1"
+              type="button"
+              data-testid="reset-password-link"
+            >
+              Reset
+            </Button>
+          </LocalizedClientLink>
+        </div>
+      </div>
+    </div>
   )
 }
 
