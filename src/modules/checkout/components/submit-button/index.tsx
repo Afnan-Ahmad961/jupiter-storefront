@@ -1,7 +1,8 @@
 "use client"
 
+import { useProgressBar } from "@lib/context/progress-bar-context"
 import { Button } from "@medusajs/ui"
-import React from "react"
+import React, { useEffect, useRef } from "react"
 import { useFormStatus } from "react-dom"
 
 export function SubmitButton({
@@ -16,6 +17,17 @@ export function SubmitButton({
   "data-testid"?: string
 }) {
   const { pending } = useFormStatus()
+  const { start: startProgress, done: doneProgress } = useProgressBar()
+  const wasPending = useRef(false)
+
+  useEffect(() => {
+    if (pending && !wasPending.current) {
+      startProgress()
+    } else if (!pending && wasPending.current) {
+      doneProgress()
+    }
+    wasPending.current = pending
+  }, [pending, startProgress, doneProgress])
 
   return (
     <Button

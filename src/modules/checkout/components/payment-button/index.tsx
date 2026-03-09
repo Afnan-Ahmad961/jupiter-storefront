@@ -1,6 +1,7 @@
 "use client"
 
 import { isManual, isStripeLike } from "@lib/constants"
+import { useProgressBar } from "@lib/context/progress-bar-context"
 import { placeOrder } from "@lib/data/cart"
 import { HttpTypes } from "@medusajs/types"
 import { Button } from "@medusajs/ui"
@@ -64,6 +65,7 @@ const StripePaymentButton = ({
 }) => {
   const [submitting, setSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const { start: startProgress, done: doneProgress } = useProgressBar()
 
   const onPaymentCompleted = async () => {
     await placeOrder()
@@ -71,6 +73,7 @@ const StripePaymentButton = ({
         setErrorMessage(err.message)
       })
       .finally(() => {
+        doneProgress()
         setSubmitting(false)
       })
   }
@@ -87,6 +90,7 @@ const StripePaymentButton = ({
 
   const handlePayment = async () => {
     setSubmitting(true)
+    startProgress()
 
     if (!stripe || !elements || !card || !cart) {
       setSubmitting(false)
@@ -170,6 +174,7 @@ const ManualTestPaymentButton = ({
 }) => {
   const [submitting, setSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const { start: startProgress, done: doneProgress } = useProgressBar()
 
   const onPaymentCompleted = async () => {
     await placeOrder()
@@ -177,12 +182,14 @@ const ManualTestPaymentButton = ({
         setErrorMessage(err.message)
       })
       .finally(() => {
+        doneProgress()
         setSubmitting(false)
       })
   }
 
   const handlePayment = () => {
     setSubmitting(true)
+    startProgress()
 
     onPaymentCompleted()
   }

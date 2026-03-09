@@ -1,6 +1,7 @@
 "use client"
 
 import { Radio, RadioGroup } from "@headlessui/react"
+import { useProgressBar } from "@lib/context/progress-bar-context"
 import { setShippingMethod } from "@lib/data/cart"
 import { calculatePriceForShippingOption } from "@lib/data/fulfillment"
 import { convertToLocale } from "@lib/util/money"
@@ -53,6 +54,7 @@ const Shipping: React.FC<ShippingProps> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingPrices, setIsLoadingPrices] = useState(true)
+  const { start: startProgress, done: doneProgress } = useProgressBar()
 
   const [showPickupOptions, setShowPickupOptions] =
     useState<string>(PICKUP_OPTION_OFF)
@@ -128,6 +130,7 @@ const Shipping: React.FC<ShippingProps> = ({
 
     let currentId: string | null = null
     setIsLoading(true)
+    startProgress()
     setShippingMethodId((prev) => {
       currentId = prev
       return id
@@ -140,6 +143,7 @@ const Shipping: React.FC<ShippingProps> = ({
         setError(err.message)
       })
       .finally(() => {
+        doneProgress()
         setIsLoading(false)
       })
   }

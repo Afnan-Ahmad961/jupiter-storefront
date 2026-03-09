@@ -158,9 +158,6 @@ export async function addToCart({
     .then(async () => {
       const cartCacheTag = await getCacheTag("carts")
       revalidateTag(cartCacheTag)
-
-      const fulfillmentCacheTag = await getCacheTag("fulfillment")
-      revalidateTag(fulfillmentCacheTag)
     })
     .catch(medusaError)
 }
@@ -191,9 +188,6 @@ export async function updateLineItem({
     .then(async () => {
       const cartCacheTag = await getCacheTag("carts")
       revalidateTag(cartCacheTag)
-
-      const fulfillmentCacheTag = await getCacheTag("fulfillment")
-      revalidateTag(fulfillmentCacheTag)
     })
     .catch(medusaError)
 }
@@ -218,9 +212,6 @@ export async function deleteLineItem(lineId: string) {
     .then(async () => {
       const cartCacheTag = await getCacheTag("carts")
       revalidateTag(cartCacheTag)
-
-      const fulfillmentCacheTag = await getCacheTag("fulfillment")
-      revalidateTag(fulfillmentCacheTag)
     })
     .catch(medusaError)
 }
@@ -283,9 +274,6 @@ export async function applyPromotions(codes: string[]) {
     .then(async () => {
       const cartCacheTag = await getCacheTag("carts")
       revalidateTag(cartCacheTag)
-
-      const fulfillmentCacheTag = await getCacheTag("fulfillment")
-      revalidateTag(fulfillmentCacheTag)
     })
     .catch(medusaError)
 }
@@ -467,9 +455,6 @@ export async function updateRegion(countryCode: string, currentPath: string) {
 
   const regionCacheTag = await getCacheTag("regions")
   revalidateTag(regionCacheTag)
-
-  const productsCacheTag = await getCacheTag("products")
-  revalidateTag(productsCacheTag)
 
   redirect(`/${countryCode}${currentPath}`)
 }

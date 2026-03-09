@@ -34,12 +34,12 @@ const Hero = () => {
             >
               Shop Now
             </Link>
-            <Link
-              href="/store"
+            {/* <Link
+              href="/about"
               className="px-6 small:px-12 py-3 border border-white text-white text-[12px] font-bold uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-colors duration-300 text-center min-w-[200px]"
             >
               About Us
-            </Link>
+            </Link> */}
           </div>
         </div>
       </div>

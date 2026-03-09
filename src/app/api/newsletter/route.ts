@@ -1,13 +1,48 @@
 import { Resend } from "resend"
 import { NextRequest, NextResponse } from "next/server"
+import { z } from "zod"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-export async function POST(req: NextRequest) {
-  const { email } = await req.json()
+const newsletterSchema = z.object({
+  email: z.string().email("Invalid email address").max(255),
+})
 
-  if (!email) {
-    return NextResponse.json({ error: "Email is required." }, { status: 400 })
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
+const RATE_LIMIT_WINDOW = 60 * 60 * 1000 // 1 hour
+const RATE_LIMIT_MAX = 5
+
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;")
+}
+
+export async function POST(req: NextRequest) {
+  const ip = req.headers.get("x-forwarded-for") || "unknown"
+  const now = Date.now()
+  const rateLimit = rateLimitMap.get(ip)
+
+  if (rateLimit && rateLimit.resetAt > now) {
+    if (rateLimit.count >= RATE_LIMIT_MAX) {
+      return NextResponse.json(
+        { error: "Too many requests. Please try again later." },
+        { status: 429 }
+      )
+    }
+    rateLimit.count++
+  } else {
+    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW })
+  }
+
+  let body
+  try {
+    body = newsletterSchema.parse(await req.json())
+  } catch {
+    return NextResponse.json({ error: "Invalid email address." }, { status: 400 })
   }
 
   const { error } = await resend.emails.send({
@@ -16,7 +51,7 @@ export async function POST(req: NextRequest) {
     subject: "New Newsletter Subscription",
     html: `
       <h2>New Newsletter Subscriber</h2>
-      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Email:</strong> ${escapeHtml(body.email)}</p>
     `,
   })
 

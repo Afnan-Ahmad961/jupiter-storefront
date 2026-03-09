@@ -63,11 +63,11 @@ export default async function Footer() {
                 About
               </h3>
               <ul className="flex flex-col gap-3">
-                <li>
+                {/* <li>
                   <Link href="/about" className="text-sm text-gray-500 hover:text-black hover:underline underline-offset-4 transition-all">
                     Our Story
                   </Link>
-                </li>
+                </li> */}
                 <li>
                   <Link href="/terms" className="text-sm text-gray-500 hover:text-black hover:underline underline-offset-4 transition-all">
                     Terms & Conditions

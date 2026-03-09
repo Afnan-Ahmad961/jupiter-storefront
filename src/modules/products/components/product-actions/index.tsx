@@ -1,6 +1,7 @@
 "use client"
 
 import { addToCart } from "@lib/data/cart"
+import { useProgressBar } from "@lib/context/progress-bar-context"
 import { useIntersection } from "@lib/hooks/use-in-view"
 import { HttpTypes } from "@medusajs/types"
 import { Button } from "@medusajs/ui"
@@ -35,6 +36,7 @@ export default function ProductActions({
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const { start: startProgress, done: doneProgress } = useProgressBar()
 
   const [options, setOptions] = useState<Record<string, string | undefined>>({})
   const [isAdding, setIsAdding] = useState(false)
@@ -125,6 +127,7 @@ export default function ProductActions({
     if (!selectedVariant?.id) return null
 
     setIsAdding(true)
+    startProgress()
 
     await addToCart({
       variantId: selectedVariant.id,
@@ -132,6 +135,7 @@ export default function ProductActions({
       countryCode,
     })
 
+    doneProgress()
     setIsAdding(false)
   }
 

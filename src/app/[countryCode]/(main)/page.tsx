@@ -6,9 +6,9 @@ import { listCollections } from "@lib/data/collections"
 import { getRegion } from "@lib/data/regions"
 
 export const metadata: Metadata = {
-  title: "Medusa Next.js Starter Template",
+  title: "Jupiterwardrobe",
   description:
-    "A performant frontend ecommerce starter template with Next.js 15 and Medusa.",
+    "Jupiter\u00AE \u2014 OOTW out of this world - volume 1 coming soon \uD83E\uDE90",
 }
 
 import { listProducts } from "@lib/data/products"
@@ -31,7 +31,7 @@ export default async function Home(props: {
   const {
     response: { products },
   } = await listProducts({
-    regionId: region.id,
+    countryCode,
     queryParams: {
       limit: 10,
       fields: "*variants.calculated_price",
