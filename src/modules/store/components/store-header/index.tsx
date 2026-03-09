@@ -60,6 +60,12 @@ const StoreHeader = ({ categories, collectionTitle }: StoreHeaderProps) => {
     }
 
     const handleCategorySelect = (id: string) => {
+        const category = categories.find(c => c.id === id)
+        if (category?.handle === "coming-soon") {
+            router.push("/coming-soon")
+            return
+        }
+
         const newCategoryId = activeCategory === id ? null : id
         setActiveCategory(newCategoryId || "")
         const query = createQueryString({ category_id: newCategoryId, page: "1" })

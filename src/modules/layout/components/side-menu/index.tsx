@@ -108,7 +108,7 @@ const SideMenu = ({
                                     {categories?.map((link) => (
                                       <Link
                                         key={link.id}
-                                        href="/store"
+                                        href={link.handle === "coming-soon" ? "/coming-soon" : `/store?category_id=${link.id}`}
                                         className="text-sm uppercase tracking-wider hover:underline underline-offset-4"
                                         onClick={close}
                                       >

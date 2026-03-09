@@ -56,49 +56,47 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
   }
 
   return (
-    <div className="w-full bg-white flex flex-col">
+    <div className="w-full flex flex-col">
       <div className="txt-medium">
         <form action={(a) => addPromotionCode(a)} className="w-full mb-5">
-          <Label className="flex gap-x-1 my-2 items-center">
+          <div className="flex flex-col gap-y-2">
             <button
               onClick={() => setIsOpen(!isOpen)}
               type="button"
-              className="txt-medium text-ui-fg-interactive hover:text-ui-fg-interactive-hover"
+              className="txt-medium text-ui-fg-interactive hover:text-ui-fg-interactive-hover transition-colors duration-200 py-2 flex items-center gap-x-2"
               data-testid="add-discount-button"
             >
               Add Promotion Code(s)
             </button>
 
-            {/* <Tooltip content="You can add multiple promotion codes">
-              <InformationCircleSolid color="var(--fg-muted)" />
-            </Tooltip> */}
-          </Label>
+            {isOpen && (
+              <>
+                <div className="flex w-full gap-x-2">
+                  <Input
+                    className="size-full bg-white border border-gray-200 rounded h-11 px-4 focus:border-black focus:outline-none transition-all duration-200"
+                    id="promotion-input"
+                    name="code"
+                    type="text"
+                    autoFocus={false}
+                    data-testid="discount-input"
+                    placeholder="Enter code"
+                  />
+                  <SubmitButton
+                    variant="secondary"
+                    className="h-11 px-6 min-w-[80px]"
+                    data-testid="discount-apply-button"
+                  >
+                    Apply
+                  </SubmitButton>
+                </div>
 
-          {isOpen && (
-            <>
-              <div className="flex w-full gap-x-2">
-                <Input
-                  className="size-full"
-                  id="promotion-input"
-                  name="code"
-                  type="text"
-                  autoFocus={false}
-                  data-testid="discount-input"
+                <ErrorMessage
+                  error={errorMessage}
+                  data-testid="discount-error-message"
                 />
-                <SubmitButton
-                  variant="secondary"
-                  data-testid="discount-apply-button"
-                >
-                  Apply
-                </SubmitButton>
-              </div>
-
-              <ErrorMessage
-                error={errorMessage}
-                data-testid="discount-error-message"
-              />
-            </>
-          )}
+              </>
+            )}
+          </div>
         </form>
 
         {promotions.length > 0 && (
@@ -126,17 +124,17 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
                         (
                         {promotion.application_method?.value !== undefined &&
                           promotion.application_method.currency_code !==
-                            undefined && (
+                          undefined && (
                             <>
                               {promotion.application_method.type ===
-                              "percentage"
+                                "percentage"
                                 ? `${promotion.application_method.value}%`
                                 : convertToLocale({
-                                    amount: +promotion.application_method.value,
-                                    currency_code:
-                                      promotion.application_method
-                                        .currency_code,
-                                  })}
+                                  amount: +promotion.application_method.value,
+                                  currency_code:
+                                    promotion.application_method
+                                      .currency_code,
+                                })}
                             </>
                           )}
                         )
