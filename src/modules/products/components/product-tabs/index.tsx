@@ -4,7 +4,6 @@ import { clx } from "@medusajs/ui"
 import { useState } from "react"
 
 import { HttpTypes } from "@medusajs/types"
-import SizeGuide from "../size-guide"
 
 type ProductTabsProps = {
   product: HttpTypes.StoreProduct
@@ -12,29 +11,18 @@ type ProductTabsProps = {
 
 const ProductTabs = ({ product }: ProductTabsProps) => {
   const [activeTab, setActiveTab] = useState(0)
-  const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false)
+
+  const description = product.description || ""
+  const [productDesc, productDetails] = description.split("---")
 
   const tabs = [
     {
       label: "Description",
-      component: <div className="text-sm leading-6 whitespace-pre-line py-4">{product.description}</div>,
+      component: <div className="text-sm leading-6 whitespace-pre-line py-4">{productDesc}</div>,
     },
     {
-      label: "Size Guide",
-      component: (
-        <div className="flex flex-col gap-y-4 py-4">
-          <p className="text-sm text-ui-fg-subtle">
-            Not sure about your size? Check our size guide for detailed measurements.
-          </p>
-          <button
-            onClick={() => setIsSizeGuideOpen(true)}
-            className="text-sm font-medium underline text-black w-fit hover:opacity-70 transition-opacity"
-          >
-            View Size Guide
-          </button>
-          <SizeGuide isOpen={isSizeGuideOpen} close={() => setIsSizeGuideOpen(false)} />
-        </div>
-      ),
+      label: "Details",
+      component: <div className="text-sm leading-6 whitespace-pre-line py-4">{productDetails}</div>,
     },
     {
       label: "Shipping & Returns",
