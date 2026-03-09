@@ -2,6 +2,7 @@
 
 import { RadioGroup } from "@headlessui/react"
 import { isStripeLike, paymentInfoMap } from "@lib/constants"
+import { useProgressBar } from "@lib/context/progress-bar-context"
 import { initiatePaymentSession } from "@lib/data/cart"
 import { CheckCircleSolid, CreditCard } from "@medusajs/icons"
 import { Button, Container, Heading, Text, clx } from "@medusajs/ui"
@@ -27,6 +28,7 @@ const Payment = ({
 
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const { start: startProgress, done: doneProgress } = useProgressBar()
   const [cardBrand, setCardBrand] = useState<string | null>(null)
   const [cardComplete, setCardComplete] = useState(false)
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(
@@ -71,6 +73,7 @@ const Payment = ({
 
   const handleSubmit = async () => {
     setIsLoading(true)
+    startProgress()
     try {
       const shouldInputCard =
         isStripeLike(selectedPaymentMethod) && !activeSession
@@ -90,6 +93,7 @@ const Payment = ({
     } catch (err: any) {
       setError(err.message)
     } finally {
+      doneProgress()
       setIsLoading(false)
     }
   }

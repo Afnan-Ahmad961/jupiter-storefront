@@ -100,7 +100,7 @@ export async function signup(_currentState: unknown, formData: FormData) {
 
     return createdCustomer
   } catch (error: any) {
-    return error.toString()
+    return "An error occurred during registration. Please try again."
   }
 }
 
@@ -117,13 +117,13 @@ export async function login(_currentState: unknown, formData: FormData) {
         revalidateTag(customerCacheTag)
       })
   } catch (error: any) {
-    return error.toString()
+    return "Invalid email or password. Please try again."
   }
 
   try {
     await transferCart()
   } catch (error: any) {
-    return error.toString()
+    return "An error occurred. Please try again."
   }
 }
 
@@ -189,7 +189,7 @@ export async function resetPassword(
       token
     )
   } catch (error: any) {
-    return error.toString()
+    return "Failed to reset password. The link may have expired."
   }
 }
 
@@ -226,8 +226,8 @@ export const addCustomerAddress = async (
       revalidateTag(customerCacheTag)
       return { success: true, error: null }
     })
-    .catch((err) => {
-      return { success: false, error: err.toString() }
+    .catch(() => {
+      return { success: false, error: "Failed to add address. Please try again." }
     })
 }
 
@@ -245,8 +245,8 @@ export const deleteCustomerAddress = async (
       revalidateTag(customerCacheTag)
       return { success: true, error: null }
     })
-    .catch((err) => {
-      return { success: false, error: err.toString() }
+    .catch(() => {
+      return { success: false, error: "Failed to delete address. Please try again." }
     })
 }
 
@@ -290,7 +290,7 @@ export const updateCustomerAddress = async (
       revalidateTag(customerCacheTag)
       return { success: true, error: null }
     })
-    .catch((err) => {
-      return { success: false, error: err.toString() }
+    .catch(() => {
+      return { success: false, error: "Failed to update address. Please try again." }
     })
 }

@@ -4,6 +4,17 @@ import { listProducts } from "@lib/data/products"
 import { getRegion, listRegions } from "@lib/data/regions"
 import ProductTemplate from "@modules/products/templates"
 import { HttpTypes } from "@medusajs/types"
+import { cache } from "react"
+
+export const revalidate = 3600
+
+const getProduct = cache(async (countryCode: string, handle: string) => {
+  const { response } = await listProducts({
+    countryCode,
+    queryParams: { handle },
+  })
+  return response.products[0] || null
+})
 
 type Props = {
   params: Promise<{ countryCode: string; handle: string }>
@@ -77,10 +88,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     notFound()
   }
 
-  const product = await listProducts({
-    countryCode: params.countryCode,
-    queryParams: { handle },
-  }).then(({ response }) => response.products[0])
+  const product = await getProduct(params.countryCode, handle)
 
   if (!product) {
     notFound()
@@ -108,10 +116,7 @@ export default async function ProductPage(props: Props) {
     notFound()
   }
 
-  const pricedProduct = await listProducts({
-    countryCode: params.countryCode,
-    queryParams: { handle: params.handle },
-  }).then(({ response }) => response.products[0])
+  const pricedProduct = await getProduct(params.countryCode, params.handle)
 
   const images = getImagesForVariant(pricedProduct, selectedVariantId)
 
@@ -119,12 +124,46 @@ export default async function ProductPage(props: Props) {
     notFound()
   }
 
+  const cheapestVariant = pricedProduct.variants
+    ?.filter((v: any) => v.calculated_price?.calculated_amount)
+    ?.sort((a: any, b: any) =>
+      a.calculated_price.calculated_amount - b.calculated_price.calculated_amount
+    )?.[0]
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: pricedProduct.title,
+    description: pricedProduct.description || pricedProduct.title,
+    image: pricedProduct.images?.map((img: any) => img.url) || [],
+    ...(pricedProduct.thumbnail && { thumbnailUrl: pricedProduct.thumbnail }),
+    brand: {
+      "@type": "Brand",
+      name: "Jupiterwardrobe",
+    },
+    ...(cheapestVariant?.calculated_price && {
+      offers: {
+        "@type": "Offer",
+        url: `${process.env.NEXT_PUBLIC_BASE_URL || ""}/${params.countryCode}/products/${pricedProduct.handle}`,
+        priceCurrency: region.currency_code?.toUpperCase() || "PKR",
+        price: (cheapestVariant.calculated_price.calculated_amount / 100).toFixed(2),
+        availability: "https://schema.org/InStock",
+      },
+    }),
+  }
+
   return (
-    <ProductTemplate
-      product={pricedProduct}
-      region={region}
-      countryCode={params.countryCode}
-      images={images}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <ProductTemplate
+        product={pricedProduct}
+        region={region}
+        countryCode={params.countryCode}
+        images={images}
+      />
+    </>
   )
 }

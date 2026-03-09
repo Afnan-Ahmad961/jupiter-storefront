@@ -10,7 +10,7 @@ import { HttpTypes } from "@medusajs/types"
 const MainLinks = [
   { name: "Home", href: "/" },
   { name: "Store", href: "/store" },
-  { name: "About Us", href: "/store" },
+  // { name: "About Us", href: "/store" },
 ]
 
 const SideMenu = ({
