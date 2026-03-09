@@ -1,132 +1,150 @@
 import { listCategories } from "@lib/data/categories"
-import { listCollections } from "@lib/data/collections"
 import Link from "@modules/common/components/localized-client-link"
-import { Facebook, Instagram, Linkedin } from "lucide-react"
-
-const TiktokIcon = ({ size = 18 }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
-  </svg>
-)
-
 import NewsletterForm from "./newsletter-form"
 
 export default async function Footer() {
-  // const { collections } = await listCollections({
-  //   fields: "*products",
-  // })
   const productCategories = await listCategories()
-  const topCategories = productCategories?.filter(c => !c.parent_category_id).slice(0, 6) || []
+  const topCategories = productCategories?.filter(c => !c.parent_category_id) || []
 
   return (
-    <footer className="w-full bg-white border-t border-gray-200 pt-20 pb-10">
-      <div className="content-container flex flex-col gap-16">
-        <div className="flex flex-col md:flex-row justify-between gap-x-12 gap-y-16">
-          {/* Brand & Newsletter Section */}
-          <div className="flex gap-8 items-center">
-            <Link href="/" className="inline-block">
-              <img
-                src="/logo.jpeg"
-                alt="Jupiter"
-                className="h-20 w-auto object-contain rounded-full"
-              />
-            </Link>
+    <footer className="w-full bg-black text-white">
+      {/* Main Grid */}
+      <div className="content-container py-16 md:py-20 px-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-16 lg:gap-12">
 
-            <div className="flex flex-col gap-4 max-w-sm">
-              <h1 className="text-xs font-bold uppercase tracking-widest text-gray-900">
-                Subscribe to our newsletter
-              </h1>
-              <p className="text-sm text-gray-500 leading-relaxed">
-                Stay updated with our latest collections, exclusive offers, and behind-the-scenes stories.
-              </p>
-              <NewsletterForm />
-            </div>
+          {/* Column 2: Jupiter Stuff */}
+          <div className="flex flex-col gap-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white">
+              Jupiter Stuff
+            </p>
+            <ul className="flex flex-col gap-3">
+              {topCategories.map((category) => (
+                <li key={category.id}>
+                  <Link
+                    href={
+                      category.handle === "coming-soon"
+                        ? "/coming-soon"
+                        : `/store?category_id=${category.id}`
+                    }
+                    className="text-sm hover:text-white transition-colors duration-200"
+                  >
+                    {category.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
 
-          {/* Navigation Links */}
-          <div className="flex flex-wrap gap-16 md:gap-24">
-
-            {/* About Column */}
-            <div className="flex flex-col gap-6">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-gray-900">
-                About
-              </h3>
-              <ul className="flex flex-col gap-3">
-                {/* <li>
-                  <Link href="/about" className="text-sm text-gray-500 hover:text-black hover:underline underline-offset-4 transition-all">
-                    Our Story
-                  </Link>
-                </li> */}
-                <li>
-                  <Link href="/terms" className="text-sm text-gray-500 hover:text-black hover:underline underline-offset-4 transition-all">
-                    Terms & Conditions
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/privacy" className="text-sm text-gray-500 hover:text-black hover:underline underline-offset-4 transition-all">
-                    Privacy Policy
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/returns" className="text-sm text-gray-500 hover:text-black hover:underline underline-offset-4 transition-all">
-                    Returns & Exchanges
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-
-            {/* Contact Column */}
-            <div className="flex flex-col gap-6">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-gray-900">
-                Contact
-              </h3>
-              <ul className="flex flex-col gap-3">
-                <li>
-                  <a href="https://wa.me/923114660101" target="_blank" rel="noreferrer" className="text-sm text-gray-500 hover:text-black hover:underline underline-offset-4 transition-all">
-                    WhatsApp: +92 311 4660101
-                  </a>
-                </li>
-                <li>
-                  <a href="mailto:info@jupiterwardrobe.com" className="text-sm text-gray-500 hover:text-black hover:underline underline-offset-4 transition-all">
-                    Email: info@jupiterwardrobe.com
-                  </a>
-                </li>
-              </ul>
-            </div>
-
+          {/* Column 3: Nerdy Stuff */}
+          <div className="flex flex-col gap-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white">
+              Nerdy Stuff
+            </p>
+            <ul className="flex flex-col gap-3">
+              <li>
+                <Link
+                  href="/contact"
+                  className="text-sm  hover:text-white transition-colors duration-200"
+                >
+                  Contact Us
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/terms"
+                  className="text-sm  hover:text-white transition-colors duration-200"
+                >
+                  Terms &amp; Conditions
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/privacy"
+                  className="text-sm  hover:text-white transition-colors duration-200"
+                >
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/returns"
+                  className="text-sm  hover:text-white transition-colors duration-200"
+                >
+                  Returns &amp; Exchanges
+                </Link>
+              </li>
+            </ul>
           </div>
+
+          {/* Column 4: Follow Us */}
+          <div className="flex flex-col gap-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white">
+              Follow Us
+            </p>
+            <ul className="flex flex-col gap-3">
+              <li>
+                <a
+                  href="https://www.tiktok.com/@jupiterwardrobe"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sm  hover:text-white transition-colors duration-200"
+                >
+                  TikTok
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.instagram.com/jupiterwardrobe/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sm  hover:text-white transition-colors duration-200"
+                >
+                  Instagram
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.facebook.com/profile.php?id=61578116953462"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sm  hover:text-white transition-colors duration-200"
+                >
+                  Facebook
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.linkedin.com/company/jupiter-wardrobe/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sm  hover:text-white transition-colors duration-200"
+                >
+                  LinkedIn
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 1: Newsletter */}
+          <div className="flex flex-col gap-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white">
+              Join Our List
+            </p>
+            <p className="text-sm  leading-relaxed">
+              Front-row seat to the latest drops and VIP-only perks. Sign up today for exclusive offers, sneak peeks & much more.
+            </p>
+            <NewsletterForm />
+          </div>
+
         </div>
+      </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-[10px] uppercase tracking-widest text-gray-400">
+      {/* Bottom Bar */}
+      <div className="border-t border-gray-800">
+        <div className="content-container py-6 flex items-center justify-center">
+          <p className="text-[10px] uppercase tracking-widest">
             © {new Date().getFullYear()} Jupiter. All rights reserved.
           </p>
-          <div className="flex items-center gap-6">
-            <a href="https://www.facebook.com/profile.php?id=61578116953462" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-black transition-colors">
-              <Facebook size={18} />
-            </a>
-            <a href="https://www.tiktok.com/@jupiterwardrobe" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-black transition-colors">
-              <TiktokIcon size={18} />
-            </a>
-            <a href="https://www.linkedin.com/company/jupiter-wardrobe/" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-black transition-colors">
-              <Linkedin size={18} />
-            </a>
-            <a href="https://www.instagram.com/jupiterwardrobe/" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-black transition-colors">
-              <Instagram size={18} />
-            </a>
-          </div>
         </div>
       </div>
     </footer>
