@@ -49,10 +49,10 @@ export function ProgressBarProvider({ children }: { children: React.ReactNode })
       })
     }, 500)
 
-    // Safety timeout: auto-complete after 12 seconds
+    // Safety timeout: auto-complete after 6 seconds
     safetyTimeoutRef.current = setTimeout(() => {
       done()
-    }, 12000)
+    }, 6000)
   }, [cleanup])
 
   const done = useCallback(() => {

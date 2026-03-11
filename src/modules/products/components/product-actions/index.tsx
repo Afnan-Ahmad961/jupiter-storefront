@@ -139,6 +139,23 @@ export default function ProductActions({
     setIsAdding(false)
   }
 
+  const getOrderedValues = (option: HttpTypes.StoreProductOption) => {
+    const values: string[] = []
+    if (product.variants) {
+      product.variants.forEach((v) => {
+        const optionValue = v.options?.find((o) => o.option_id === option.id)
+        if (optionValue && !values.includes(optionValue.value)) {
+          values.push(optionValue.value)
+        }
+      })
+    }
+    // Fallback to option.values if variants don't provide it
+    if (values.length === 0 && option.values) {
+      return option.values.map((v) => v.value)
+    }
+    return values
+  }
+
   return (
     <>
       <div className="flex flex-col gap-y-2" ref={actionsRef}>
@@ -146,10 +163,12 @@ export default function ProductActions({
           {(product.variants?.length ?? 0) > 1 && (
             <div className="flex flex-col gap-y-4">
               {(product.options || []).map((option) => {
+                const orderedValues = getOrderedValues(option)
                 return (
                   <div key={option.id}>
                     <OptionSelect
                       option={option}
+                      orderedValues={orderedValues}
                       current={options[option.id]}
                       updateOption={setOptionValue}
                       title={option.title ?? ""}

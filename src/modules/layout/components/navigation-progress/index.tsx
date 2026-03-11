@@ -41,8 +41,13 @@ export default function NavigationProgress() {
       try {
         const url = new URL(href, window.location.origin)
         if (url.origin !== window.location.origin) return
-        // Skip if navigating to the same page
-        if (url.pathname === window.location.pathname) return
+        // Skip if navigating to the exact same URL or just hash changes
+        if (
+          url.pathname === window.location.pathname &&
+          url.search === window.location.search
+        ) {
+          return
+        }
       } catch {
         return
       }

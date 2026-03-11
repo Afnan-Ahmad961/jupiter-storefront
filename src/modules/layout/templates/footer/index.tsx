@@ -12,7 +12,7 @@ export default async function Footer() {
       <div className="content-container py-16 md:py-20 px-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-16 lg:gap-12">
 
-          {/* Column 2: Jupiter Stuff */}
+          {/* Column 1: Jupiter Stuff */}
           <div className="flex flex-col gap-5">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white">
               Jupiter Stuff
@@ -35,7 +35,7 @@ export default async function Footer() {
             </ul>
           </div>
 
-          {/* Column 3: Nerdy Stuff */}
+          {/* Column 2: Nerdy Stuff */}
           <div className="flex flex-col gap-5">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white">
               Nerdy Stuff
@@ -76,7 +76,7 @@ export default async function Footer() {
             </ul>
           </div>
 
-          {/* Column 4: Follow Us */}
+          {/* Column 3: Follow Us */}
           <div className="flex flex-col gap-5">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white">
               Follow Us
@@ -125,7 +125,7 @@ export default async function Footer() {
             </ul>
           </div>
 
-          {/* Column 1: Newsletter */}
+          {/* Column 4: Newsletter */}
           <div className="flex flex-col gap-5">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white">
               Join Our List
