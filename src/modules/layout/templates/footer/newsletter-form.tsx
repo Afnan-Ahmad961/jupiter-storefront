@@ -27,32 +27,33 @@ export default function NewsletterForm() {
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-3">
       <form
         onSubmit={handleSubmit}
-        className="flex items-center border-b border-gray-300 focus-within:border-black transition-colors py-2 max-w-xs"
+        className="flex items-center border border-white hover:border-white focus-within:border-white transition-colors duration-200"
       >
         <input
           name="email"
           type="email"
           required
-          placeholder="ENTER YOUR EMAIL"
-          className="bg-transparent w-full outline-none text-xs uppercase tracking-wider placeholder:text-gray-400"
+          placeholder="Your email"
+          className="bg-transparent flex-1 px-4 py-3 outline-none text-sm text-white placeholder:text-gray-200 min-w-0"
         />
         <button
           type="submit"
           disabled={status === "loading"}
-          className="ml-2 hover:opacity-70 transition-opacity disabled:opacity-40"
+          className="px-4 py-3 text-white hover:text-gray-300 transition-colors disabled:opacity-40"
+          aria-label="Subscribe"
         >
           <ArrowRight size={16} />
         </button>
       </form>
 
       {status === "success" && (
-        <p className="text-xs text-emerald-600 tracking-wide">Thank you for subscribing!</p>
+        <p className="text-xs text-emerald-400 tracking-wide">Thank you for subscribing!</p>
       )}
       {status === "error" && (
-        <p className="text-xs text-rose-500 tracking-wide">Something went wrong. Please try again.</p>
+        <p className="text-xs text-rose-400 tracking-wide">Something went wrong. Please try again.</p>
       )}
     </div>
   )

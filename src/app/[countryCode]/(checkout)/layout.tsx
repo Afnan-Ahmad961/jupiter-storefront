@@ -8,8 +8,8 @@ export default function CheckoutLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="w-full bg-white relative small:min-h-screen">
-      <div className="h-20 bg-white border-b border-gray-100">
+    <div className="w-full bg-white relative small:min-h-screen flex flex-col">
+      <div className="h-20 bg-white border-b border-gray-100 flex-shrink-0">
         <nav className="flex h-full items-center content-container justify-between">
           <LocalizedClientLink
             href="/"
@@ -29,10 +29,7 @@ export default function CheckoutLayout({
           </LocalizedClientLink>
         </nav>
       </div>
-      <div className="relative" data-testid="checkout-container">{children}</div>
-      <div className="py-4 w-full flex items-center justify-center">
-        <MedusaCTA />
-      </div>
+      <div className="relative flex-1" data-testid="checkout-container">{children}</div>
     </div>
   )
 }
