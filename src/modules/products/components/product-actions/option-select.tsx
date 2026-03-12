@@ -6,6 +6,7 @@ import SizeGuide from "../size-guide"
 
 type OptionSelectProps = {
   option: HttpTypes.StoreProductOption
+  orderedValues?: string[]
   current: string | undefined
   updateOption: (title: string, value: string) => void
   title: string
@@ -15,13 +16,14 @@ type OptionSelectProps = {
 
 const OptionSelect: React.FC<OptionSelectProps> = ({
   option,
+  orderedValues,
   current,
   updateOption,
   title,
   "data-testid": dataTestId,
   disabled,
 }) => {
-  const filteredOptions = (option.values ?? []).map((v) => v.value)
+  const filteredOptions = orderedValues || (option.values ?? []).map((v) => v.value)
   const [isSizeGuideOpen, setIsSizeGuideOpen] = React.useState(false)
 
   return (
