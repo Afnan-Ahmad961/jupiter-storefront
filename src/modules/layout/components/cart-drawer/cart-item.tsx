@@ -8,6 +8,8 @@ import { convertToLocale } from "@lib/util/money"
 import { useState } from "react"
 import Spinner from "@modules/common/icons/spinner"
 
+import LineItemOptions from "@modules/common/components/line-item-options"
+
 type DrawerCartItemProps = {
     item: HttpTypes.StoreCartLineItem
     currencyCode: string
@@ -33,12 +35,6 @@ const DrawerCartItem = ({ item, currencyCode }: DrawerCartItemProps) => {
             })
     }
 
-    // Helper to get variant options (Size, Color)
-    // Assuming standard Medusa variant options structure
-    const getOption = (title: string) => {
-        return item.variant?.options?.find(opt => opt.option?.title?.toLowerCase() === title.toLowerCase())?.value
-    }
-
     return (
         <div className="flex gap-x-6 w-full py-8 border-b border-gray-100 last:border-0 relative bg-white">
             <div className="w-[180px] aspect-square bg-gray-50 flex-shrink-0 relative">
@@ -62,13 +58,7 @@ const DrawerCartItem = ({ item, currencyCode }: DrawerCartItemProps) => {
                         </Text>
                     </div>
 
-                    <div className="flex flex-col gap-y-1.5 mt-1">
-                        {item.variant?.options?.map((opt) => (
-                            <Text key={opt.id} className="text-[13px] text-gray-500 font-medium">
-                                {opt.option?.title}: {opt.value}
-                            </Text>
-                        ))}
-                    </div>
+                    <LineItemOptions variant={item.variant} />
                 </div>
 
                 <div className="flex flex-col mt-4">
