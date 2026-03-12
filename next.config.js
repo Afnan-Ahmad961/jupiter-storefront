@@ -73,12 +73,20 @@ const nextConfig = {
       },
       ...(S3_HOSTNAME && S3_PATHNAME
         ? [
-            {
-              protocol: "https",
-              hostname: S3_HOSTNAME,
-              pathname: S3_PATHNAME,
-            },
-          ]
+          {
+            protocol: "https",
+            hostname: S3_HOSTNAME,
+            pathname: S3_PATHNAME,
+          },
+        ]
+        : []),
+      ...(process.env.MEDUSA_BACKEND_URL
+        ? [
+          {
+            protocol: new URL(process.env.MEDUSA_BACKEND_URL).protocol.replace(":", ""),
+            hostname: new URL(process.env.MEDUSA_BACKEND_URL).hostname,
+          },
+        ]
         : []),
     ],
   },
