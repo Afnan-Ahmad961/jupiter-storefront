@@ -3,7 +3,8 @@
 import { clx } from "@medusajs/ui"
 import { useState } from "react"
 
-import { HttpTypes } from "@medusajs/types"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
 
 type ProductTabsProps = {
   product: HttpTypes.StoreProduct
@@ -15,14 +16,22 @@ const ProductTabs = ({ product }: ProductTabsProps) => {
   const description = product.description || ""
   const [productDesc, productDetails] = description.split("---")
 
+  const MarkdownContent = ({ content }: { content: string }) => (
+    <div className="prose prose-sm max-w-none py-4 text-ui-fg-base leading-6">
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+        {content}
+      </ReactMarkdown>
+    </div>
+  )
+
   const tabs = [
     {
       label: "Description",
-      component: <div className="text-sm leading-6 whitespace-pre-line py-4">{productDesc}</div>,
+      component: <MarkdownContent content={productDesc} />,
     },
     {
       label: "Details",
-      component: <div className="text-sm leading-6 whitespace-pre-line py-4">{productDetails}</div>,
+      component: <MarkdownContent content={productDetails} />,
     },
     {
       label: "Shipping & Returns",

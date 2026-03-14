@@ -187,6 +187,21 @@ export default function ProductActions({
     setIsAdding(false)
   }
 
+  const sortValues = (title: string, values: string[]) => {
+    if (title.toLowerCase() !== "size") return values
+
+    const sizeOrder = ["s", "m", "l", "xl"]
+    return [...values].sort((a, b) => {
+      const indexA = sizeOrder.indexOf(a.toLowerCase())
+      const indexB = sizeOrder.indexOf(b.toLowerCase())
+
+      if (indexA !== -1 && indexB !== -1) return indexA - indexB
+      if (indexA !== -1) return -1
+      if (indexB !== -1) return 1
+      return a.localeCompare(b)
+    })
+  }
+
   const getOrderedValues = (option: HttpTypes.StoreProductOption) => {
     const values: string[] = []
     if (product.variants) {
@@ -199,9 +214,10 @@ export default function ProductActions({
     }
     // Fallback to option.values if variants don't provide it
     if (values.length === 0 && option.values) {
-      return option.values.map((v) => v.value)
+      values.push(...option.values.map((v) => v.value))
     }
-    return values
+    
+    return sortValues(option.title || "", values)
   }
 
   return (
@@ -262,7 +278,8 @@ export default function ProductActions({
               {(bundledProduct.variants?.length ?? 0) > 1 && (
                 <div className="flex flex-col gap-y-3 w-full sm:w-auto sm:min-w-[150px]">
                   {(bundledProduct.options || []).map((option: any) => {
-                    const orderedValues = option.values?.map((v: any) => v.value) || []
+                    const values = option.values?.map((v: any) => v.value) || []
+                    const orderedValues = sortValues(option.title || "", values)
                     return (
                       <div key={option.id} className="flex items-center gap-x-3 justify-between sm:justify-end">
                         <label className="text-xs uppercase font-bold tracking-widest text-ui-fg-base whitespace-nowrap">{option.title}</label>
@@ -300,7 +317,7 @@ export default function ProductActions({
             !!disabled ||
             isAdding ||
             !isValidVariant ||
-            (includeBundle && (!bundleInStock || !selectedBundleVariant))
+            (includeBundle && bundledProduct && (!bundleInStock || !selectedBundleVariant))
           }
           variant="primary"
           className="w-full h-12 bg-black text-white rounded-none uppercase font-bold tracking-widest hover:bg-black/90 transition-colors duration-150"
