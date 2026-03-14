@@ -77,7 +77,7 @@ const CartDrawer = ({ cart, children }: { cart?: HttpTypes.StoreCart | null, chi
 
                     <div className="fixed inset-0 overflow-hidden">
                         <div className="absolute inset-0 overflow-hidden">
-                            <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+                            <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full small:pl-10">
                                 <Transition.Child
                                     as={Fragment}
                                     enter="transform transition ease-in-out duration-500 sm:duration-700"
@@ -127,9 +127,11 @@ const CartDrawer = ({ cart, children }: { cart?: HttpTypes.StoreCart | null, chi
                                                 ) : (
                                                     <div className="flex h-full flex-col items-center justify-center space-y-4 text-center">
                                                         <p className="text-gray-500">Your shopping bag is empty.</p>
-                                                        <Button variant="secondary" onClick={close} className="w-full max-w-[200px] uppercase tracking-wider rounded-none">
-                                                            Start Shopping
-                                                        </Button>
+                                                        <LocalizedClientLink href="/store" className="w-full flex justify-center">
+                                                            <Button variant="secondary" onClick={close} className="w-full max-w-[200px] uppercase tracking-wider rounded-none">
+                                                                Start Shopping
+                                                            </Button>
+                                                        </LocalizedClientLink>
                                                     </div>
                                                 )}
                                             </div>

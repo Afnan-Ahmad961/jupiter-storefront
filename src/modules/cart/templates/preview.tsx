@@ -2,6 +2,7 @@ import { HttpTypes } from "@medusajs/types"
 import { Text, clx } from "@medusajs/ui"
 import Thumbnail from "@modules/products/components/thumbnail"
 import { convertToLocale } from "@lib/util/money"
+import LineItemOptions from "@modules/common/components/line-item-options"
 
 const ItemsPreviewTemplate = ({
     cart,
@@ -30,9 +31,7 @@ const ItemsPreviewTemplate = ({
                                 <Text className="text-[12px] font-bold uppercase tracking-widest text-black">
                                     {item.product_title}
                                 </Text>
-                                <Text className="text-[12px] text-gray-500 mt-1 uppercase">
-                                    {item.variant?.title}
-                                </Text>
+                                <LineItemOptions variant={item.variant} />
                                 <Text className="text-[12px] text-gray-400 mt-0.5">
                                     Quantity: {item.quantity}
                                 </Text>

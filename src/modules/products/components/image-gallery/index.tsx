@@ -32,12 +32,12 @@ const ImageGallery = ({ images }: ImageGalleryProps) => {
       </div>
 
       {/* Main Images */}
-      <div className="flex flex-col flex-1 gap-y-4">
+      <div className="flex small:flex-col overflow-x-auto small:overflow-hidden snap-x snap-mandatory no-scrollbar flex-1 gap-x-4 small:gap-y-4">
         {images.map((image, index) => {
           return (
             <div
               key={image.id}
-              className="relative aspect-[29/34] w-full overflow-hidden bg-ui-bg-subtle"
+              className="relative aspect-[29/34] w-full min-w-full small:min-w-0 overflow-hidden bg-ui-bg-subtle snap-center"
               id={image.id}
             >
               {!!image.url && (
@@ -47,7 +47,7 @@ const ImageGallery = ({ images }: ImageGalleryProps) => {
                   className="absolute inset-0"
                   alt={`Product image ${index + 1}`}
                   fill
-                  sizes="(max-width: 576px) 280px, (max-width: 768px) 360px, (max-width: 992px) 480px, 800px"
+                  sizes="(max-width: 576px) 100vw, (max-width: 768px) 360px, (max-width: 992px) 480px, 800px"
                   style={{
                     objectFit: "cover",
                   }}

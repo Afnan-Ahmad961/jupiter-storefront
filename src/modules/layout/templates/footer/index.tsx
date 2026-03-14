@@ -1,9 +1,11 @@
 import { listCategories } from "@lib/data/categories"
+import { listCollections } from "@lib/data/collections"
 import Link from "@modules/common/components/localized-client-link"
 import NewsletterForm from "./newsletter-form"
 
 export default async function Footer() {
   const productCategories = await listCategories()
+  const { collections } = await listCollections()
   const topCategories = productCategories?.filter(c => !c.parent_category_id) || []
 
   return (
@@ -17,22 +19,46 @@ export default async function Footer() {
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white">
               Jupiter Stuff
             </p>
-            <ul className="flex flex-col gap-3">
-              {topCategories.map((category) => (
-                <li key={category.id}>
-                  <Link
-                    href={
-                      category.handle === "coming-soon"
-                        ? "/coming-soon"
-                        : `/store?category_id=${category.id}`
-                    }
-                    className="text-sm hover:text-white transition-colors duration-200"
-                  >
-                    {category.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            
+            <div className="flex flex-col gap-6">
+              {collections.length > 0 && (
+                <div className="flex flex-col gap-3">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Collections</p>
+                  <ul className="flex flex-col gap-2">
+                    {collections.map((collection) => (
+                      <li key={collection.id}>
+                        <Link
+                          href={`/collections/${collection.handle}`}
+                          className="text-sm hover:text-white transition-colors duration-200"
+                        >
+                          {collection.title}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <div className="flex flex-col gap-3">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Categories</p>
+                <ul className="flex flex-col gap-2">
+                  {topCategories.map((category) => (
+                    <li key={category.id}>
+                      <Link
+                        href={
+                          category.handle === "coming-soon"
+                            ? "/coming-soon"
+                            : `/store?category_id=${category.id}`
+                        }
+                        className="text-sm hover:text-white transition-colors duration-200"
+                      >
+                        {category.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </div>
 
           {/* Column 2: Nerdy Stuff */}
