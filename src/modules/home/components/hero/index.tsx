@@ -3,7 +3,7 @@ import Link from "next/link"
 
 const Hero = () => {
   return (
-    <div className="h-screen w-full relative overflow-hidden">
+    <div className="h-[70vh] small:h-screen w-full relative overflow-hidden">
       <Image
         src="/banner1.jpeg"
         alt="Banner"
@@ -18,10 +18,10 @@ const Hero = () => {
         <div className="content-container flex flex-col small:flex-row justify-between items-end gap-y-8">
           {/* Left Side Text */}
           <div className="text-white max-w-xl">
-            <h1 className="text-base small:text-4xl font-bold uppercase tracking-tight mb-4">
+            <h1 className="text-2xl small:text-4xl font-bold uppercase tracking-tight mb-4 leading-tight">
               Kith for the NFL:<br /> Road to Victory
             </h1>
-            <p className="text-sm small:text-base font-medium opacity-90 max-w-md leading-relaxed">
+            <p className="text-xs small:text-base font-medium opacity-90 max-w-md leading-relaxed">
               Kith and the NFL return for the third season, celebrating the historic 1991 Super Bowl run, featuring the New York Giants, Chicago Bears, Buffalo Bills, and the San Francisco 49ers.
             </p>
           </div>

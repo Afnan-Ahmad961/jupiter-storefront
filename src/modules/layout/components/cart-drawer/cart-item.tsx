@@ -37,7 +37,7 @@ const DrawerCartItem = ({ item, currencyCode }: DrawerCartItemProps) => {
 
     return (
         <div className="flex gap-x-6 w-full py-8 border-b border-gray-100 last:border-0 relative bg-white">
-            <div className="w-[180px] aspect-square bg-gray-50 flex-shrink-0 relative">
+            <div className="w-36 h-36 aspect-square bg-gray-50 flex-shrink-0 relative">
                 <Thumbnail
                     thumbnail={item.thumbnail}
                     images={item.variant?.product?.images}
@@ -47,7 +47,7 @@ const DrawerCartItem = ({ item, currencyCode }: DrawerCartItemProps) => {
             </div>
 
             <div className="flex flex-col flex-1 text-ui-fg-base relative">
-                <div className="flex flex-col gap-y-1">
+                <div className="flex flex-col sm:gap-y-1">
                     <Text className="text-[13px] font-bold uppercase tracking-widest">{item.product_title}</Text>
                     <div className="border-b border-gray-100 pb-2 mb-2 w-full">
                         <Text className="text-[13px] text-gray-700">
@@ -61,7 +61,7 @@ const DrawerCartItem = ({ item, currencyCode }: DrawerCartItemProps) => {
                     <LineItemOptions variant={item.variant} />
                 </div>
 
-                <div className="flex flex-col mt-4">
+                <div className="flex flex-col sm:mt-4">
                     {/* Quantity Stepper */}
                     <div className="flex items-center gap-x-4">
                         <Text className="text-[13px] text-gray-800 font-medium tracking-tight">Quantity:</Text>
@@ -87,7 +87,7 @@ const DrawerCartItem = ({ item, currencyCode }: DrawerCartItemProps) => {
                     </div>
                 </div>
 
-                <div className="absolute bottom-0 right-0">
+                <div className="bottom-0 right-0 sm:absolute ml-auto">
                     <button
                         className="uppercase text-[12px] tracking-[0.15em] text-gray-400 hover:text-black transition-colors font-medium"
                         onClick={() => changeQuantity(0)}
