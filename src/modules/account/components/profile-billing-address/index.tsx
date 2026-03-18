@@ -8,6 +8,7 @@ import NativeSelect from "@modules/common/components/native-select"
 import AccountInfo from "../account-info"
 import { HttpTypes } from "@medusajs/types"
 import { addCustomerAddress, updateCustomerAddress } from "@lib/data/customer"
+import { toastError, toastSuccess } from "@lib/util/toast"
 
 type MyInformationProps = {
   customer: HttpTypes.StoreCustomer
@@ -59,6 +60,12 @@ const ProfileBillingAddress: React.FC<MyInformationProps> = ({
 
   useEffect(() => {
     setSuccessState(state.success)
+    if (state.success) {
+      toastSuccess("Billing address updated.")
+    }
+    if (state.error) {
+      toastError("Couldn't update billing address. Please try again.")
+    }
   }, [state])
 
   const currentInfo = useMemo(() => {

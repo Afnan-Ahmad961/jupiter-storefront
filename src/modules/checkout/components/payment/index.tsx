@@ -14,6 +14,7 @@ import PaymentButton from "../payment-button"
 import Divider from "@modules/common/components/divider"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
+import { toastError } from "@lib/util/toast"
 
 const Payment = ({
   cart,
@@ -44,9 +45,13 @@ const Payment = ({
   const setPaymentMethod = async (method: string) => {
     setError(null)
     setSelectedPaymentMethod(method)
-    await initiatePaymentSession(cart, {
-      provider_id: method,
-    })
+    try {
+      await initiatePaymentSession(cart, {
+        provider_id: method,
+      })
+    } catch {
+      toastError("Couldn't initialize payment method. Please try a different option.")
+    }
   }
 
   const paidByGiftcard =
@@ -92,6 +97,7 @@ const Payment = ({
       }
     } catch (err: any) {
       setError(err.message)
+      toastError("Failed to set up payment. Please try again.")
     } finally {
       doneProgress()
       setIsLoading(false)

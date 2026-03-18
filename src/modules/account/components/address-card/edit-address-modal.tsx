@@ -15,6 +15,7 @@ import {
   deleteCustomerAddress,
   updateCustomerAddress,
 } from "@lib/data/customer"
+import { toastError, toastSuccess } from "@lib/util/toast"
 
 type EditAddressProps = {
   region: HttpTypes.StoreRegion
@@ -52,13 +53,23 @@ const EditAddress: React.FC<EditAddressProps> = ({
   useEffect(() => {
     if (formState.success) {
       setSuccessState(true)
+      toastSuccess("Address updated.")
+    }
+    if (formState.error) {
+      toastError("Couldn't update address. Please try again.")
     }
   }, [formState])
 
   const removeAddress = async () => {
     setRemoving(true)
-    await deleteCustomerAddress(address.id)
-    setRemoving(false)
+    try {
+      await deleteCustomerAddress(address.id)
+      toastSuccess("Address removed.")
+    } catch {
+      toastError("Couldn't remove address. Please try again.")
+    } finally {
+      setRemoving(false)
+    }
   }
 
   return (

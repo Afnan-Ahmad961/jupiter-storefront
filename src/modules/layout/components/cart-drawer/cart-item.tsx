@@ -7,6 +7,7 @@ import Thumbnail from "@modules/products/components/thumbnail"
 import { convertToLocale } from "@lib/util/money"
 import { useState } from "react"
 import Spinner from "@modules/common/icons/spinner"
+import { toastError } from "@lib/util/toast"
 
 import LineItemOptions from "@modules/common/components/line-item-options"
 
@@ -23,16 +24,21 @@ const DrawerCartItem = ({ item, currencyCode }: DrawerCartItemProps) => {
         setError(null)
         setUpdating(true)
 
-        await updateLineItem({
-            lineId: item.id,
-            quantity,
-        })
-            .catch((err) => {
-                setError(err.message)
+        try {
+            await updateLineItem({
+                lineId: item.id,
+                quantity,
             })
-            .finally(() => {
-                setUpdating(false)
-            })
+        } catch (err: any) {
+            setError(err.message)
+            if (quantity === 0) {
+                toastError("Couldn't remove item. Please try again.")
+            } else {
+                toastError("Couldn't update quantity. Please refresh and try again.")
+            }
+        } finally {
+            setUpdating(false)
+        }
     }
 
     return (

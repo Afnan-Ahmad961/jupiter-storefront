@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { ArrowRight } from "lucide-react"
+import { toastError, toastSuccess } from "@lib/util/toast"
 
 export default function NewsletterForm() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
@@ -20,9 +21,11 @@ export default function NewsletterForm() {
 
     if (res.ok) {
       setStatus("success")
+      toastSuccess("You're subscribed! Welcome to Jupiter.")
       e.currentTarget.reset()
     } else {
       setStatus("error")
+      toastError("Couldn't subscribe. Please try again.")
     }
   }
 

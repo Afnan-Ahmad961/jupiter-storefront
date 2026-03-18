@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { toastError, toastSuccess } from "@lib/util/toast"
 
 export default function ReturnsForm() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
@@ -27,10 +28,12 @@ export default function ReturnsForm() {
 
     if (res.ok) {
       setStatus("success")
+      toastSuccess("Return request submitted. We'll be in touch soon.")
       form.reset()
     } else {
       const json = await res.json()
       setErrorMsg(json.error || "Something went wrong. Please try again.")
+      toastError(json.error || "Couldn't submit return request. Please try again.")
       setStatus("error")
     }
   }
