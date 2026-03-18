@@ -8,11 +8,12 @@ import { Heading, Text, useToggleState } from "@medusajs/ui"
 import Divider from "@modules/common/components/divider"
 import Spinner from "@modules/common/icons/spinner"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { useActionState } from "react"
+import { useActionState, useEffect } from "react"
 import BillingAddress from "../billing_address"
 import ErrorMessage from "../error-message"
 import ShippingAddress from "../shipping-address"
 import { SubmitButton } from "../submit-button"
+import { toastError } from "@lib/util/toast"
 
 const Addresses = ({
   cart,
@@ -38,6 +39,12 @@ const Addresses = ({
   }
 
   const [message, formAction] = useActionState(setAddresses, null)
+
+  useEffect(() => {
+    if (message) {
+      toastError(message)
+    }
+  }, [message])
 
   return (
     <div className="bg-white">

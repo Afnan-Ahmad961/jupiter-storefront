@@ -5,6 +5,7 @@ import { requestPasswordReset } from "@lib/data/customer"
 import Input from "@modules/common/components/input"
 import { SubmitButton } from "@modules/checkout/components/submit-button"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import { toastError } from "@lib/util/toast"
 
 export default function ForgotPasswordPage() {
   const [submitted, setSubmitted] = useState(false)
@@ -17,7 +18,7 @@ export default function ForgotPasswordPage() {
     try {
       await requestPasswordReset(emailValue)
     } catch {
-      // Always show success to prevent email enumeration
+      toastError("Something went wrong. Please try again.")
     }
 
     setSubmitted(true)

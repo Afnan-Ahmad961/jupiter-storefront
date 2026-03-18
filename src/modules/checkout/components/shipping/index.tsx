@@ -13,6 +13,7 @@ import Divider from "@modules/common/components/divider"
 import MedusaRadio from "@modules/common/components/radio"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
+import { toastError } from "@lib/util/toast"
 
 const PICKUP_OPTION_ON = "__PICKUP_ON"
 const PICKUP_OPTION_OFF = "__PICKUP_OFF"
@@ -136,16 +137,16 @@ const Shipping: React.FC<ShippingProps> = ({
       return id
     })
 
-    await setShippingMethod({ cartId: cart.id, shippingMethodId: id })
-      .catch((err) => {
-        setShippingMethodId(currentId)
-
-        setError(err.message)
-      })
-      .finally(() => {
-        doneProgress()
-        setIsLoading(false)
-      })
+    try {
+      await setShippingMethod({ cartId: cart.id, shippingMethodId: id })
+    } catch (err: any) {
+      setShippingMethodId(currentId)
+      setError(err.message)
+      toastError("Couldn't apply shipping. Please try again.")
+    } finally {
+      doneProgress()
+      setIsLoading(false)
+    }
   }
 
   useEffect(() => {

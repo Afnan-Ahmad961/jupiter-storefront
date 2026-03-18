@@ -16,6 +16,7 @@ export default async function ProductActionsWrapper({
   const product = await listProducts({
     queryParams: { id: [id] },
     regionId: region.id,
+    noCache: true,
   }).then(({ response }) => response.products[0])
 
   if (!product) {
@@ -40,6 +41,7 @@ export default async function ProductActionsWrapper({
         const enrichedProducts = await listProducts({
           queryParams: { id: productIds },
           regionId: region.id,
+          noCache: true,
         }).then(({ response }) => response.products)
 
         bundlesData.bundledProducts = enrichedProducts

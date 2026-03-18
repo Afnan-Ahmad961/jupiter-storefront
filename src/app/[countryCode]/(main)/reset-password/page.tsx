@@ -8,6 +8,7 @@ import { SubmitButton } from "@modules/checkout/components/submit-button"
 import ErrorMessage from "@modules/checkout/components/error-message"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { useState, useEffect } from "react"
+import { toastError, toastSuccess } from "@lib/util/toast"
 
 export default function ResetPasswordPage() {
   const searchParams = useSearchParams()
@@ -17,10 +18,15 @@ export default function ResetPasswordPage() {
   const [success, setSuccess] = useState(false)
 
   useEffect(() => {
-    if (message === undefined) {
+    if (message === undefined && !success) {
       setSuccess(true)
+      toastSuccess("Password reset successfully!")
     }
-  }, [message])
+
+    if (typeof message === "string") {
+      toastError(message)
+    }
+  }, [message, success])
 
   if (!token || !email) {
     return (

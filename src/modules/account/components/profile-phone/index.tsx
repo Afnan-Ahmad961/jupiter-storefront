@@ -7,6 +7,7 @@ import Input from "@modules/common/components/input"
 import AccountInfo from "../account-info"
 import { HttpTypes } from "@medusajs/types"
 import { updateCustomer } from "@lib/data/customer"
+import { toastError, toastSuccess } from "@lib/util/toast"
 
 type MyInformationProps = {
   customer: HttpTypes.StoreCustomer
@@ -42,6 +43,12 @@ const ProfileEmail: React.FC<MyInformationProps> = ({ customer }) => {
 
   useEffect(() => {
     setSuccessState(state.success)
+    if (state.success) {
+      toastSuccess("Phone number updated.")
+    }
+    if (state.error) {
+      toastError("Couldn't update your profile. Please try again.")
+    }
   }, [state])
 
   return (

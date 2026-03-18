@@ -13,6 +13,7 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import ProductPrice from "../product-price"
 import MobileActions from "./mobile-actions"
 import { useRouter } from "next/navigation"
+import { toastError } from "@lib/util/toast"
 
 type ProductActionsProps = {
   product: HttpTypes.StoreProduct
@@ -169,22 +170,32 @@ export default function ProductActions({
     setIsAdding(true)
     startProgress()
 
-    await addToCart({
-      variantId: selectedVariant.id,
-      quantity: 1,
-      countryCode,
-    })
-
-    if (includeBundle && selectedBundleVariant?.id) {
+    try {
       await addToCart({
-        variantId: selectedBundleVariant.id,
+        variantId: selectedVariant.id,
         quantity: 1,
         countryCode,
       })
-    }
 
-    doneProgress()
-    setIsAdding(false)
+      if (includeBundle && selectedBundleVariant?.id) {
+        try {
+          await addToCart({
+            variantId: selectedBundleVariant.id,
+            quantity: 1,
+            countryCode,
+          })
+        } catch {
+          toastError("Item added to cart but we couldn't add the bundled item. Please try again.")
+        }
+      }
+
+
+    } catch {
+      toastError("Failed to add to cart. Please try again.")
+    } finally {
+      doneProgress()
+      setIsAdding(false)
+    }
   }
 
   const sortValues = (title: string, values: string[]) => {

@@ -8,6 +8,7 @@ import { Button } from "@medusajs/ui"
 import { useElements, useStripe } from "@stripe/react-stripe-js"
 import React, { useState } from "react"
 import ErrorMessage from "../error-message"
+import { toastError } from "@lib/util/toast"
 
 type PaymentButtonProps = {
   cart: HttpTypes.StoreCart
@@ -68,14 +69,15 @@ const StripePaymentButton = ({
   const { start: startProgress, done: doneProgress } = useProgressBar()
 
   const onPaymentCompleted = async () => {
-    await placeOrder()
-      .catch((err) => {
-        setErrorMessage(err.message)
-      })
-      .finally(() => {
-        doneProgress()
-        setSubmitting(false)
-      })
+    try {
+      await placeOrder()
+    } catch (err: any) {
+      setErrorMessage(err.message)
+      toastError("Failed to place your order. Please try refreshing the page.")
+    } finally {
+      doneProgress()
+      setSubmitting(false)
+    }
   }
 
   const stripe = useStripe()
@@ -177,14 +179,15 @@ const ManualTestPaymentButton = ({
   const { start: startProgress, done: doneProgress } = useProgressBar()
 
   const onPaymentCompleted = async () => {
-    await placeOrder()
-      .catch((err) => {
-        setErrorMessage(err.message)
-      })
-      .finally(() => {
-        doneProgress()
-        setSubmitting(false)
-      })
+    try {
+      await placeOrder()
+    } catch (err: any) {
+      setErrorMessage(err.message)
+      toastError("Failed to place your order. Please try refreshing the page.")
+    } finally {
+      doneProgress()
+      setSubmitting(false)
+    }
   }
 
   const handlePayment = () => {

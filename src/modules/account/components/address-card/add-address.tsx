@@ -11,6 +11,7 @@ import Modal from "@modules/common/components/modal"
 import { SubmitButton } from "@modules/checkout/components/submit-button"
 import { HttpTypes } from "@medusajs/types"
 import { addCustomerAddress } from "@lib/data/customer"
+import { toastError, toastSuccess } from "@lib/util/toast"
 
 const AddAddress = ({
   region,
@@ -43,6 +44,10 @@ const AddAddress = ({
   useEffect(() => {
     if (formState.success) {
       setSuccessState(true)
+      toastSuccess("Address saved successfully.")
+    }
+    if (formState.error) {
+      toastError("Couldn't save address. Please try again.")
     }
   }, [formState])
 

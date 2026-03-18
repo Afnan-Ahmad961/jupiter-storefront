@@ -6,6 +6,7 @@ import { Text, Heading, Input, Button, IconButton, Toaster } from "@medusajs/ui"
 import { SubmitButton } from "@modules/checkout/components/submit-button"
 import { CheckCircleMiniSolid, XCircleSolid } from "@medusajs/icons"
 import { useEffect, useState } from "react"
+import { toastError } from "@lib/util/toast"
 
 export default function TransferRequestForm() {
   const [showSuccess, setShowSuccess] = useState(false)
@@ -20,7 +21,11 @@ export default function TransferRequestForm() {
     if (state.success && state.order) {
       setShowSuccess(true)
     }
-  }, [state.success, state.order])
+
+    if (!state.success && state.error) {
+      toastError(state.error)
+    }
+  }, [state])
 
   return (
     <div className="flex flex-col gap-y-4 w-full">

@@ -9,6 +9,7 @@ import { HttpTypes } from "@medusajs/types"
 import Trash from "@modules/common/icons/trash"
 import ErrorMessage from "../error-message"
 import { SubmitButton } from "../submit-button"
+import { toastError, toastSuccess } from "@lib/util/toast"
 
 type DiscountCodeProps = {
   cart: HttpTypes.StoreCart & {
@@ -26,9 +27,13 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
       (promotion) => promotion.code !== code
     )
 
-    await applyPromotions(
-      validPromotions.filter((p) => p.code !== undefined).map((p) => p.code!)
-    )
+    try {
+      await applyPromotions(
+        validPromotions.filter((p) => p.code !== undefined).map((p) => p.code!)
+      )
+    } catch {
+      toastError("Couldn't remove promo code. Please try again.")
+    }
   }
 
   const addPromotionCode = async (formData: FormData) => {
@@ -46,8 +51,10 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
 
     try {
       await applyPromotions(codes)
+      toastSuccess("Promo code applied!")
     } catch (e: any) {
       setErrorMessage(e.message)
+      toastError("Invalid or expired promo code.")
     }
 
     if (input) {
