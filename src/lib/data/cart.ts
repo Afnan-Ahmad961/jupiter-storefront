@@ -25,7 +25,7 @@ import { listCartShippingMethods } from "./fulfillment"
 export async function retrieveCart(cartId?: string, fields?: string) {
   const id = cartId || (await getCartId())
   fields ??=
-    "*items, *region, *items.product, *items.variant, *items.variant.options, *items.variant.options.option, *items.thumbnail, *items.metadata, +items.total, *promotions, *shipping_methods"
+    "*items, *region, *items.product, *items.product.images, *items.variant, *items.variant.product.images, *items.variant.options, *items.variant.options.option, *items.thumbnail, *items.metadata, +items.total, *promotions, *shipping_methods"
 
   if (!id) {
     return null
