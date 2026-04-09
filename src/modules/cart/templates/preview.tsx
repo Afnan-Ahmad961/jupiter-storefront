@@ -22,6 +22,7 @@ const ItemsPreviewTemplate = ({
                         <div className="w-[80px] aspect-square bg-gray-50 flex-shrink-0">
                             <Thumbnail
                                 thumbnail={item.thumbnail}
+                                images={item.variant?.product?.images}
                                 size="square"
                                 className="object-cover w-full h-full"
                             />
