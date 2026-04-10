@@ -18,7 +18,7 @@ const ProductTabs = ({ product }: ProductTabsProps) => {
 
   const MarkdownContent = ({ content }: { content: string }) => (
     <div className="prose prose-sm max-w-none py-4 text-ui-fg-base leading-6">
-      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+      <ReactMarkdown remarkPlugins={[remarkGfm]} skipHtml={true}>
         {content}
       </ReactMarkdown>
     </div>

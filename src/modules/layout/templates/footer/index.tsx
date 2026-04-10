@@ -112,7 +112,7 @@ export default async function Footer() {
                 <a
                   href="https://www.tiktok.com/@jupiterwardrobe"
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="text-sm  hover:text-white transition-colors duration-200"
                 >
                   TikTok
@@ -122,7 +122,7 @@ export default async function Footer() {
                 <a
                   href="https://www.instagram.com/jupiterwardrobe/"
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="text-sm  hover:text-white transition-colors duration-200"
                 >
                   Instagram
@@ -132,7 +132,7 @@ export default async function Footer() {
                 <a
                   href="https://www.facebook.com/profile.php?id=61578116953462"
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="text-sm  hover:text-white transition-colors duration-200"
                 >
                   Facebook
@@ -142,7 +142,7 @@ export default async function Footer() {
                 <a
                   href="https://www.linkedin.com/company/jupiter-wardrobe/"
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="text-sm  hover:text-white transition-colors duration-200"
                 >
                   LinkedIn
