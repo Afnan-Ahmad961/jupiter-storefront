@@ -22,6 +22,7 @@ function escapeHtml(str: string): string {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;")
+    .replace(/\//g, "&#47;")
 }
 
 export async function POST(req: NextRequest) {
