@@ -26,7 +26,7 @@ export default function ProductCarousel({
     }
 
     return (
-        <div className="content-container py-12 small:py-24 relative overflow-hidden group/carousel">
+        <div className="content-container py-4 small:py-4 relative overflow-hidden group/carousel">
             <div className="relative">
                 <div
                     ref={scrollContainerRef}

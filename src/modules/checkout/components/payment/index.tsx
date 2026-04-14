@@ -237,14 +237,18 @@ const Payment = ({
                   className="flex gap-2 txt-medium text-ui-fg-subtle items-center"
                   data-testid="payment-details-summary"
                 >
-                  <Container className="flex items-center h-7 w-fit p-2 bg-ui-button-neutral-hover">
-                    {paymentInfoMap[selectedPaymentMethod]?.icon || (
-                      <CreditCard />
-                    )}
-                  </Container>
+                  {selectedPaymentMethod !== "pp_system_default" && (
+                    <Container className="flex items-center h-7 w-fit p-2 bg-ui-button-neutral-hover">
+                      {paymentInfoMap[selectedPaymentMethod]?.icon || (
+                        <CreditCard />
+                      )}
+                    </Container>
+                  )}
                   <Text>
                     {isStripeLike(selectedPaymentMethod) && cardBrand
                       ? cardBrand
+                      : selectedPaymentMethod === "pp_system_default"
+                      ? "Payment upon delivery"
                       : "Another step will appear"}
                   </Text>
                 </div>
