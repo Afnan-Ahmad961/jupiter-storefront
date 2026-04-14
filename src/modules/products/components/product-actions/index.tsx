@@ -280,7 +280,7 @@ export default function ProductActions({
                 <div className="flex flex-col gap-y-1 flex-1 min-w-0">
                   <span className="font-semibold text-lg truncate sm:whitespace-normal">{bundledProduct.title}</span>
                   <ProductPrice product={bundledProduct} variant={selectedBundleVariant || undefined} />
-                  <a href={`/${countryCode}/products/${bundledProduct.handle}`} className="text-xs underline text-ui-fg-subtle hover:text-ui-fg-base mt-1" target="_blank" rel="noreferrer">
+                  <a href={`/${countryCode}/products/${bundledProduct.handle}`} className="text-xs underline text-ui-fg-subtle hover:text-ui-fg-base mt-1" target="_blank" rel="noopener noreferrer">
                     View Details
                   </a>
                 </div>

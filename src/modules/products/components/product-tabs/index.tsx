@@ -15,6 +15,7 @@ const ProductTabs = ({ product }: ProductTabsProps) => {
   const description = product.description || ""
   const [productDesc, productDetails] = description.split("---")
 
+
   const HtmlContent = ({ content }: { content: string }) => (
     <div 
       className="prose prose-sm max-w-none py-4 text-ui-fg-base leading-6"
