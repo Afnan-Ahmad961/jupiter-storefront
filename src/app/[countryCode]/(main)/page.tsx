@@ -13,6 +13,7 @@ export const metadata: Metadata = {
 
 import { listProducts } from "@lib/data/products"
 import ProductCarousel from "@modules/home/components/product-carousel"
+import NewArrivalsMarquee from "@modules/home/components/new-arrivals-marquee"
 import Link from "next/link"
 
 export default async function Home(props: {
@@ -41,10 +42,11 @@ export default async function Home(props: {
   return (
     <>
       <Hero />
+      <NewArrivalsMarquee />
       {products && (
-        <div className="py-12 flex flex-col items-center">
+        <div className="pb-12 flex flex-col items-center">
           <ProductCarousel products={products} region={region} />
-          <div className="mt-8">
+          <div className="mt-4">
             <Link
               href="/store"
               className="px-12 py-4 border border-gray-200 text-black text-[12px] font-bold uppercase tracking-[0.2em] hover:bg-black hover:text-white transition-colors duration-300 inline-block"

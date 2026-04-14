@@ -32,7 +32,7 @@ export const paymentInfoMap: Record<
   },
   pp_system_default: {
     title: "Cash on Delivery",
-    icon: <CreditCard />,
+    icon: <></>,
   },
   // Add more payment providers here
 }

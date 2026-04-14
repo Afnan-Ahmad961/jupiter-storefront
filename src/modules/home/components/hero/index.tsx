@@ -5,24 +5,24 @@ const Hero = () => {
   return (
     <div className="h-[70vh] small:h-screen w-full relative overflow-hidden">
       <Image
-        src="/banner1.jpeg"
+        src="/Banner.png"
         alt="Banner"
         fill
         className="object-cover"
         priority
       />
-      <div className="absolute inset-0 bg-black/10" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
 
       {/* Hero Content Overlay */}
       <div className="absolute inset-x-0 bottom-0 pb-12 small:pb-12">
         <div className="content-container flex flex-col small:flex-row justify-between items-end gap-y-8">
           {/* Left Side Text */}
-          <div className="text-white max-w-xl">
+          <div className="text-white max-w-xl drop-shadow-lg">
             <h1 className="text-2xl small:text-4xl font-bold uppercase tracking-tight mb-4 leading-tight">
-              Kith for the NFL:<br /> Road to Victory
+              Step Into Volume 1:<br /> Out Of This World
             </h1>
-            <p className="text-xs small:text-base font-medium opacity-90 max-w-md leading-relaxed">
-              Kith and the NFL return for the third season, celebrating the historic 1991 Super Bowl run, featuring the New York Giants, Chicago Bears, Buffalo Bills, and the San Francisco 49ers.
+            <p className="text-xs small:text-base font-medium max-w-md leading-relaxed">
+              Featuring 7 premium oversized silhouettes built for modern street style.
             </p>
           </div>
 
