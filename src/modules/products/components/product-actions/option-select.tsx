@@ -32,20 +32,9 @@ const OptionSelect: React.FC<OptionSelectProps> = ({
         <span className="text-xs uppercase font-bold tracking-tight">
           {title}
         </span>
-        {title.toLowerCase() === "size" && (
-          <>
-            <button
-              onClick={() => setIsSizeGuideOpen(true)}
-              className="text-[10px] uppercase font-bold tracking-tight underline"
-            >
-              View Size Guide
-            </button>
-            <SizeGuide isOpen={isSizeGuideOpen} close={() => setIsSizeGuideOpen(false)} />
-          </>
-        )}
       </div>
       <div
-        className="flex flex-wrap gap-2"
+        className="flex flex-wrap gap-2 items-center"
         data-testid={dataTestId}
       >
         {filteredOptions.map((v) => {
@@ -67,6 +56,17 @@ const OptionSelect: React.FC<OptionSelectProps> = ({
             </button>
           )
         })}
+        {title.toLowerCase().includes("size") && (
+          <>
+            <button
+              onClick={() => setIsSizeGuideOpen(true)}
+              className="ml-auto text-xs uppercase font-bold tracking-tight underline text-ui-fg-subtle hover:text-black transition-colors"
+            >
+              Size Guide
+            </button>
+            <SizeGuide isOpen={isSizeGuideOpen} close={() => setIsSizeGuideOpen(false)} />
+          </>
+        )}
       </div>
     </div>
   )

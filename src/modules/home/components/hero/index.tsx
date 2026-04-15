@@ -3,12 +3,19 @@ import Link from "next/link"
 
 const Hero = () => {
   return (
-    <div className="h-[70vh] small:h-screen w-full relative overflow-hidden">
+    <div className="h-[60vh] small:h-screen w-full relative overflow-hidden">
       <Image
         src="/Banner.png"
         alt="Banner"
         fill
-        className="object-cover"
+        className="hidden small:block object-cover"
+        priority
+      />
+      <Image
+        src="/Mobile-Banner.png"
+        alt="Mobile Banner"
+        fill
+        className="block small:hidden object-cover bg-top"
         priority
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />

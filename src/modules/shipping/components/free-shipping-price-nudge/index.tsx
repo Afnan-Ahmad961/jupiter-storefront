@@ -10,7 +10,7 @@ import {
 } from "@medusajs/types"
 import { Button, clx } from "@medusajs/ui"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { StoreFreeShippingPrice } from "types/global"
 
 const computeTarget = (
@@ -196,6 +196,26 @@ function FreeShippingPopup({
   price: StoreFreeShippingPrice
 }) {
   const [isClosed, setIsClosed] = useState(false)
+  const [showPopup, setShowPopup] = useState(false)
+
+  useEffect(() => {
+    if (typeof window === "undefined") return
+
+    const sessionKey = `free_shipping_last_total_${cart.id}`
+    const stored = sessionStorage.getItem(sessionKey)
+
+    if (stored !== null) {
+      const lastTotal = parseFloat(stored)
+      // Only show if the total has actually increased since we last recorded it in this session
+      if (cart.item_total > lastTotal) {
+        setShowPopup(true)
+        setIsClosed(false)
+      }
+    }
+
+    // Always update the stored total to the current one to prevent re-triggering on same state
+    sessionStorage.setItem(sessionKey, cart.item_total.toString())
+  }, [cart.item_total, cart.id])
 
   return (
     <div
@@ -203,8 +223,8 @@ function FreeShippingPopup({
         "fixed bottom-5 right-5 flex flex-col items-end gap-2 transition-all duration-500 ease-in-out z-10",
         {
           "opacity-0 invisible delay-1000": price.target_reached,
-          "opacity-0 invisible": isClosed,
-          "opacity-100 visible": !price.target_reached && !isClosed,
+          "opacity-0 invisible": isClosed || !showPopup,
+          "opacity-100 visible": !price.target_reached && !isClosed && showPopup,
         }
       )}
     >
