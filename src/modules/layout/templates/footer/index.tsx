@@ -11,7 +11,7 @@ export default async function Footer() {
   return (
     <footer className="w-full bg-black text-white">
       {/* Main Grid */}
-      <div className="content-container py-16 md:py-20 px-20">
+      <div className="content-container py-16 md:py-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-16 lg:gap-12">
 
           {/* Column 1: Jupiter Stuff */}

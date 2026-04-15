@@ -199,9 +199,9 @@ export default function ProductActions({
   }
 
   const sortValues = (title: string, values: string[]) => {
-    if (title.toLowerCase() !== "size") return values
+    if (!title.toLowerCase().includes("size")) return values
 
-    const sizeOrder = ["s", "m", "l", "xl"]
+    const sizeOrder = ["xxs", "xs", "s", "m", "l", "xl", "xxl", "2xl", "3xl"]
     return [...values].sort((a, b) => {
       const indexA = sizeOrder.indexOf(a.toLowerCase())
       const indexB = sizeOrder.indexOf(b.toLowerCase())
