@@ -3,7 +3,7 @@
 import { Badge, Heading, Input, Label, Text } from "@medusajs/ui"
 import React from "react"
 
-import { applyPromotions } from "@lib/data/cart"
+import { applyPromotions, setShippingMethod } from "@lib/data/cart"
 import { convertToLocale } from "@lib/util/money"
 import { HttpTypes } from "@medusajs/types"
 import Trash from "@modules/common/icons/trash"
@@ -22,6 +22,12 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
   const [errorMessage, setErrorMessage] = React.useState("")
 
   const { promotions = [] } = cart
+
+  const revalidateShipping = async () => {
+    const selectedOptionId = cart.shipping_methods?.[0]?.shipping_option_id
+    if (!selectedOptionId) return
+    await setShippingMethod({ cartId: cart.id, shippingMethodId: selectedOptionId })
+  }
   const removePromotionCode = async (code: string) => {
     const validPromotions = promotions.filter(
       (promotion) => promotion.code !== code
@@ -31,6 +37,12 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
       await applyPromotions(
         validPromotions.filter((p) => p.code !== undefined).map((p) => p.code!)
       )
+
+      try {
+        await revalidateShipping()
+      } catch {
+        // Shipping re-evaluation failure should not affect the promo removal UX
+      }
     } catch {
       toastError("Couldn't remove promo code. Please try again.")
     }
@@ -52,8 +64,14 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
     try {
       await applyPromotions(codes)
       toastSuccess("Promo code applied!")
+
+      try {
+        await revalidateShipping()
+      } catch {
+        // Shipping re-evaluation failure should not affect the promo success UX
+      }
     } catch (e: any) {
-      setErrorMessage(e.message)
+      setErrorMessage("Invalid or expired promo code.")
       toastError("Invalid or expired promo code.")
     }
 
