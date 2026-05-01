@@ -48,6 +48,18 @@ export default function ProductActions({
   const [includeBundle, setIncludeBundle] = useState(true)
   const [bundleOptions, setBundleOptions] = useState<Record<string, string>>({})
 
+  const [isRestockChecked, setIsRestockChecked] = useState(false)
+  const [restockEmail, setRestockEmail] = useState("")
+  const [isRestocking, setIsRestocking] = useState(false)
+  const [restockSuccess, setRestockSuccess] = useState(false)
+
+  // Reset restock states when selected options change
+  useEffect(() => {
+    setIsRestockChecked(false)
+    setRestockSuccess(false)
+    setRestockEmail("")
+  }, [options])
+
   // Preselect the first variant options by default
   useEffect(() => {
     if (product.variants?.length === 1 && !Object.keys(options).length) {
@@ -163,6 +175,31 @@ export default function ProductActions({
     return false
   }, [selectedBundleVariant])
 
+  const handleRestockSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!restockEmail || !selectedVariant) return
+    setIsRestocking(true)
+    try {
+      const res = await fetch("/api/restock", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: restockEmail,
+          productName: `${product.title} - ${selectedVariant.title}`,
+        }),
+      })
+
+      if (!res.ok) {
+        throw new Error("Failed to subscribe")
+      }
+      setRestockSuccess(true)
+    } catch (err) {
+      toastError("Failed to subscribe to restock notifications.")
+    } finally {
+      setIsRestocking(false)
+    }
+  }
+
   // add the selected variant to the cart
   const handleAddToCart = async () => {
     if (!selectedVariant?.id) return null
@@ -227,7 +264,7 @@ export default function ProductActions({
     if (values.length === 0 && option.values) {
       values.push(...option.values.map((v) => v.value))
     }
-    
+
     return sortValues(option.title || "", values)
   }
 
@@ -341,6 +378,52 @@ export default function ProductActions({
               ? "Out of Stock"
               : "Add to Cart"}
         </Button>
+
+        {!inStock && selectedVariant && (
+          <div className="flex flex-col gap-y-2 mt-4">
+            <div className="flex items-center gap-x-2">
+              <input
+                type="checkbox"
+                id="restock-notify"
+                checked={isRestockChecked}
+                onChange={(e) => setIsRestockChecked(e.target.checked)}
+                className="w-4 h-4 rounded border-gray-300 text-black focus:ring-black accent-black cursor-pointer"
+              />
+              <p className="text-sm cursor-pointer select-none font-medium">
+                Notify me when back in stock
+              </p>
+            </div>
+
+            {isRestockChecked && !restockSuccess && (
+              <form onSubmit={handleRestockSubmit} className="flex gap-x-2 mt-2">
+                <input
+                  type="email"
+                  required
+                  placeholder="Enter your email"
+                  value={restockEmail}
+                  onChange={(e) => setRestockEmail(e.target.value)}
+                  className="flex-1 border border-ui-border-base rounded-md px-3 py-2 text-sm outline-none focus:border-black"
+                />
+                <Button
+                  type="submit"
+                  variant="secondary"
+                  isLoading={isRestocking}
+                  disabled={isRestocking || !restockEmail}
+                  className="h-auto"
+                >
+                  Notify Me
+                </Button>
+              </form>
+            )}
+
+            {isRestockChecked && restockSuccess && (
+              <p className="text-sm text-[#e9b321] mt-2">
+                You've been subscribed to restock notifications!
+              </p>
+            )}
+          </div>
+        )}
+
         <MobileActions
           product={product}
           variant={selectedVariant}
